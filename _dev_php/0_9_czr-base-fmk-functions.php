@@ -20,7 +20,7 @@ function czr_get_parent_theme_slug() {
 //Creates a new instance
 //@params ex :
 //array(
-//    'base_url' => PC_AC_BASE_URL . '/inc/czr-base-fmk'
+//    'base_url' => NIMBLE_BASE_URL . '/inc/czr-base-fmk'
 // )
 function CZR_Fmk_Base( $params = array() ) {
     return CZR_Fmk_Base::czr_fmk_get_instance( $params );

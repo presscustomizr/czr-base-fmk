@@ -13,6 +13,10 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
 
             // fetch templates
             add_action( 'wp_ajax_ac_get_template', array( $this, 'ac_set_ajax_czr_tmpl' ) );
+
+            // Set input content
+            // @see ::ac_generate_czr_tmpl_from_map
+            add_action( 'czr_set_input_tmpl_content', array( $this, 'ac_set_input_tmpl_content' ), 10, 3 );
         }
 
         // hook : 'wp_ajax_ac_get_template'

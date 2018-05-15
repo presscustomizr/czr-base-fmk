@@ -873,7 +873,7 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
       setupInputCollectionFromDOM : function() {
             var inputParentInst = this;//<= because fired with .call( inputParentInst )
             if ( ! _.isFunction( inputParentInst ) ) {
-                  throw new Error( 'setupInputCollectionFromDOM : inputParentInst is not valid.' );
+                  throw new Error( 'setupInputCollectionFromDOM => inputParentInst is not valid.' );
             }
             var module = inputParentInst.module,
                 is_mod_opt = _.has( inputParentInst() , 'is_mod_opt' );
@@ -894,7 +894,7 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
             var _defaultInputParentModel = is_mod_opt ? inputParentInst.defaultModOptModel : inputParentInst.defaultItemModel;
 
             if ( _.isEmpty( _defaultInputParentModel ) || _.isUndefined( _defaultInputParentModel ) ) {
-                  throw new Error( 'No default model found in item or mod opt ' + inputParentInst.id + '.' );
+                  throw new Error( 'setupInputCollectionFromDOM => No default model found in item or mod opt ' + inputParentInst.id + '.' );
             }
 
             //prepare and sets the inputParentInst value on api ready
@@ -917,17 +917,17 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
                   //console.log('/// ID /// => ', _id );
                   //skip if no valid input data-czrtype is found in this node
                   if ( _.isUndefined( _id ) || _.isEmpty( _id ) ) {
-                        api.errare( 'setupInputCollectionFromDOM : missing data-czrtype for ' + module.id );
+                        api.errare( 'setupInputCollectionFromDOM => missing data-czrtype id for input type ' + $(this).data( 'input-type' ) + ' in module ' + module.id + '. Check that the server input template is properly declared.' );
                         return;
                   }
                   //check if this property exists in the current inputParentInst model
                   if ( ! _.has( inputParentInst_model, _id ) ) {
-                        throw new Error('The item or mod opt property : ' + _id + ' has been found in the DOM but not in the item or mod opt model : '+ inputParentInst.id + '. The input can not be instantiated.');
+                        throw new Error('setupInputCollectionFromDOM => The item or mod opt property : ' + _id + ' has been found in the DOM but not in the item or mod opt model : '+ inputParentInst.id + '. The input can not be instantiated.');
                   }
 
                   //Do we have a specific set of options defined in the parent module for this inputConstructor ?
-                  var _inputType      = $(this).attr( 'data-input-type' ),
-                      _inputTransport = $(this).attr( 'data-transport' ) || 'inherit',//<= if no specific transport ( refresh or postMessage ) has been defined in the template, inherits the control transport
+                  var _inputType      = $(this).data( 'input-type' ),
+                      _inputTransport = $(this).data( 'transport' ) || 'inherit',//<= if no specific transport ( refresh or postMessage ) has been defined in the template, inherits the control transport
                       _inputOptions   = _.has( module.inputOptions, _inputType ) ? module.inputOptions[ _inputType ] : {},
                       _inputArgs = {
                             id            : _id,
@@ -941,8 +941,23 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
                             module        : module
                       };
 
+                  // introduced for Nimble
+                  // allows us to fine tune the ajax action on input change
+                  // the input constructor args, are stored in each input instance as input.constructorOptions @see Input::initialize()
+                  // the on input change, the constructor options are passed as params when setting the api.Value(to, from, params )
+                  // This can be used when listening to the associated setting of the parent module.
+                  if ( ! _.isUndefined( $(this).data( 'refresh-markup' ) ) ) {
+                        _inputArgs.refresh_markup = $(this).data( 'refresh-markup' );
+                  }
+                  if ( ! _.isUndefined( $(this).data( 'refresh-stylesheet' ) ) ) {
+                        _inputArgs.refresh_stylesheet = $(this).data( 'refresh-stylesheet' );
+                  }
+                  if ( ! _.isUndefined( $(this).data( 'refresh-fonts' ) ) ) {
+                        _inputArgs.refresh_fonts = $(this).data( 'refresh-fonts' );
+                  }
+
                   // ALLOW PLUGINS TO FILTER THE INPUT ARGS BEFORE INSTANTIATION
-                  inputParentInst.trigger( 'input-args-before-instantiation', _inputArgs );
+                  api.trigger( 'input-args-before-instantiation', _inputArgs );
 
                   // INSTANTIATE THE INPUT
                   inputParentInst.czr_Input.add( _id, new inputParentInst.inputConstructor( _id, _inputArgs ) );
@@ -1457,6 +1472,9 @@ $.extend( CZRInputMths , {
           //write the options as properties, name is included
           $.extend( input, options || {} );
 
+          // store the constructor options
+          input.constructorOptions = $.extend( true, {}, options );
+
           //DEFERRED STATES
           //store the state of ready.
           input.isReady = $.Deferred();
@@ -1593,7 +1611,8 @@ $.extend( CZRInputMths , {
           input.input_parent.set( _new_model, {
                 input_changed     : input.id,
                 input_transport   : input.transport,
-                not_preview_sent  : 'postMessage' === input.transport//<= this parameter set to true will prevent the setting to be sent to the preview ( @see api.Setting.prototype.preview override ). This is useful to decide if a specific input should refresh or not the preview.
+                not_preview_sent  : 'postMessage' === input.transport,//<= this parameter set to true will prevent the setting to be sent to the preview ( @see api.Setting.prototype.preview override ). This is useful to decide if a specific input should refresh or not the preview.
+                inputRegistrationParams : input.constructorOptions
           } );
 
           //Trigger and send specific events when changing a published input item
@@ -1742,44 +1761,61 @@ $.extend( CZRInputMths , {
 
     //@use rangeslider https://github.com/andreruffert/rangeslider.js
     setupRangeSlider : function( options ) {
-              var input = this,
-                  $handle,
-                  _updateHandle = function(el, val) {
-                        el.textContent = val + input.container.find('input').data( 'unit' );
-                  };
+          var input = this,
+              $handle,
+              _updateHandle = function(el, val) {
+                    el.textContent = val + input.container.find('input').data( 'unit' );
+              };
 
-              $( input.container ).find('input').rangeslider( {
-                    // Feature detection the default is `true`.
-                    // Set this to `false` if you want to use
-                    // the polyfill also in Browsers which support
-                    // the native <input type="range"> element.
-                    polyfill: false,
+          $( input.container ).find('input').rangeslider( {
+                // Feature detection the default is `true`.
+                // Set this to `false` if you want to use
+                // the polyfill also in Browsers which support
+                // the native <input type="range"> element.
+                polyfill: false,
 
-                    // Default CSS classes
-                    rangeClass: 'rangeslider',
-                    disabledClass: 'rangeslider--disabled',
-                    horizontalClass: 'rangeslider--horizontal',
-                    verticalClass: 'rangeslider--vertical',
-                    fillClass: 'rangeslider__fill',
-                    handleClass: 'rangeslider__handle',
+                // Default CSS classes
+                rangeClass: 'rangeslider',
+                disabledClass: 'rangeslider--disabled',
+                horizontalClass: 'rangeslider--horizontal',
+                verticalClass: 'rangeslider--vertical',
+                fillClass: 'rangeslider__fill',
+                handleClass: 'rangeslider__handle',
 
-                    // Callback function
-                    onInit: function() {
-                          $handle = $('.rangeslider__handle', this.$range);
-                          $('.rangeslider__handle', this.$range);
-                          _updateHandle( $handle[0], this.value );
-                    },
-                    // Callback function
-                    onSlide: function(position, value) {
-                          _updateHandle( $handle[0], value );
-                    },
-                    // Callback function
-                    //onSlideEnd: function(position, value) {}
-              } );
-              // .on('input', function() {
-              //       _updateHandle( $handle[0], this.value );
-              // });
-        }
+                // Callback function
+                onInit: function() {
+                      $handle = $('.rangeslider__handle', this.$range);
+                      $('.rangeslider__handle', this.$range);
+                      _updateHandle( $handle[0], this.value );
+                },
+                // Callback function
+                onSlide: function(position, value) {
+                      _updateHandle( $handle[0], value );
+                },
+                // Callback function
+                //onSlideEnd: function(position, value) {}
+          } );
+          // .on('input', function() {
+          //       _updateHandle( $handle[0], this.value );
+          // });
+    },
+
+    // for h_alignment and h_text_alignment types
+    setupHAlignement : function( input_options ) {
+        var input = this,
+            $wrapper = $('.sek-h-align-wrapper', input.container );
+        // on init
+        $wrapper.find( 'div[data-sek-align="' + input() +'"]' ).addClass('selected');
+
+        // on click
+        $wrapper.on( 'click', '[data-sek-align]', function(evt) {
+              evt.preventDefault();
+              $wrapper.find('.selected').removeClass('selected');
+              $.when( $(this).addClass('selected') ).done( function() {
+                    input( $(this).data('sek-align') );
+              });
+        });
+    }
 });//$.extend
 })( wp.customize , jQuery, _ );var CZRInputMths = CZRInputMths || {};
 ( function ( api, $, _ ) {
@@ -2483,26 +2519,26 @@ $.extend( CZRItemMths , {
             return item_model_candidate;
       },
 
-      //React to a single item change
-      //cb of module.czr_Item( item.id ).callbacks
-      //the data can typically hold informations passed by the input that has been changed and its specific preview transport (can be PostMessage )
-      //data looks like :
-      //{
+      // React to a single item change
+      // cb of module.czr_Item( item.id ).callbacks
+      // the params can typically hold informations passed by the input that has been changed and its specific preview transport (can be PostMessage )
+      // params looks like :
+      // {
       //  module : {}
       //  input_changed     : string input.id
       //  input_transport   : 'postMessage' or '',
       //  not_preview_sent  : bool
-      //}
-      itemReact : function( to, from, data ) {
+      // }
+      itemReact : function( to, from, params ) {
             var item = this,
                 module = item.module;
 
-            data = data || {};
+            params = params || {};
 
             //update the collection
-            module.updateItemsCollection( { item : to, data : data } ).done( function() {
+            module.updateItemsCollection( { item : to, params : params } ).done( function() {
                   //Always update the view title when the item collection has been updated
-                  item.writeItemViewTitle( to, data );
+                  item.writeItemViewTitle( to, params );
             });
 
             //send item to the preview. On update only, not on creation.
@@ -3391,22 +3427,21 @@ $.extend( CZRModuleMths, {
 
             //if a module is embedded in a control, its container == the control container.
             module.container = $( module.control.selector );
-            module.embedded.resolve();
 
             //render the item(s) wrapper
-            module.embedded.done( function() {
-                  module.renderModuleParts()
-                        .done( function( $_module_items_wrapper ){
-                              if ( false === $_module_items_wrapper.length ) {
-                                  throw new Error( 'The items wrapper has not been rendered for module : ' + module.id );
-                              }
-                              //stores the items wrapper ( </ul> el ) as a jQuery var
-                              module.itemsWrapper = $_module_items_wrapper;
-                        })
-                        .fail( function( _r_ ) {
-                              throw new Error( [ "initialize module => failed module.renderModuleParts() for module : " , module.id , _r_ ].join(' '));
-                        });
-            });
+            //and resolve the module.embedded promise()
+            module.renderModuleParts()
+                  .done( function( $_module_items_wrapper ){
+                        if ( false === $_module_items_wrapper.length ) {
+                            throw new Error( 'The items wrapper has not been rendered for module : ' + module.id );
+                        }
+                        //stores the items wrapper ( </ul> el ) as a jQuery var
+                        module.itemsWrapper = $_module_items_wrapper;
+                        module.embedded.resolve();
+                  })
+                  .fail( function( _r_ ) {
+                        throw new Error( [ "initialize module => failed module.renderModuleParts() for module : " , module.id , _r_ ].join(' '));
+                  });
 
             /*-----------------------------------------------
             * MODULE OPTIONS
@@ -3519,13 +3554,17 @@ $.extend( CZRModuleMths, {
                   //1) on section expansion
                   //2) or in the case of a module embedded in a regular control, if the module section is already opened => typically when skope is enabled
                   if ( _.has( api, 'czr_activeSectionId' ) && module.control.section() == api.czr_activeSectionId() && 'resolved' != module.isReady.state() ) {
-                        module.ready();
+                        module.embedded.then( function() {
+                              module.ready();
+                        });
                   }
 
                   api.section( module.control.section() ).expanded.bind(function(to) {
                         //set module ready on section expansion
                         if ( 'resolved' != module.isReady.state() ) {
-                              module.ready();
+                              module.embedded.then( function() {
+                                    module.ready();
+                              });
                         }
                   });
             }
@@ -4046,18 +4085,18 @@ $.extend( CZRModuleMths, {
       //@param args can be
       //{
       //  collection : [],
-      //  data : data {}
+      //  params : params {}
       //},
       //
       //or {
       //  item : {}
-      //  data : data {}
+      //  params : params {}
       //}
       //if a collection is provided in the passed args then simply refresh the collection
       //=> typically used when reordering the collection item with sortable or when a item is removed
       //
-      //the args.data can typically hold informations passed by the input that has been changed and its specific preview transport (can be PostMessage )
-      //data looks like :
+      //the args.params can typically hold informations passed by the input that has been changed and its specific preview transport (can be PostMessage )
+      //params looks like :
       //{
       //  module : {}
       //  input_changed     : string input.id
@@ -4082,8 +4121,8 @@ $.extend( CZRModuleMths, {
               if ( ! _.has( args, 'item' ) ) {
                   throw new Error('updateItemsCollection, no item provided ' + module.control.id + '. Aborting');
               }
-              //normalizes with data
-              args = _.extend( { data : {} }, args );
+              //normalizes with params
+              args = _.extend( { params : {} }, args );
 
               var item_candidate = _.clone( args.item ),
                   hasMissingProperty = false;
@@ -4117,8 +4156,8 @@ $.extend( CZRModuleMths, {
 
               //updates the collection value
               //=> is listened to by module.itemCollectionReact
-              module.itemCollection.set( _new_collection, args.data );
-              return dfd.resolve( { collection : _new_collection, data : args.data } ).promise();
+              module.itemCollection.set( _new_collection, args.params );
+              return dfd.resolve( { collection : _new_collection, params : args.params } ).promise();
       },
 
 
@@ -5427,9 +5466,9 @@ $.extend( CZRBaseModuleControlMths, {
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////// WHERE THE STREETS HAVE NO NAMES //////////////////////////////////////////////////////
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      //cb of control.czr_moduleCollection.callbacks
-      //@data is an optional object. { silent : true }
-      moduleCollectionReact : function( to, from, data ) {
+      // cb of control.czr_moduleCollection.callbacks
+      // @params is an optional object. { silent : true }
+      moduleCollectionReact : function( to, from, params ) {
             var control = this,
                 is_module_added = _.size(to) > _.size(from),
                 is_module_removed = _.size(from) > _.size(to),
@@ -5450,9 +5489,9 @@ $.extend( CZRBaseModuleControlMths, {
             // is there a passed module param ?
             // if so prepare it for DB
             // if a module is provided, we also want to pass its id to the preview => can be used to target specific selectors in a partial refresh scenario
-            if ( _.isObject( data  ) && _.has( data, 'module' ) ) {
-                  data.module_id = data.module.id;
-                  data.module = control.prepareModuleForDB( $.extend( true, {}, data.module  ) );
+            if ( _.isObject( params  ) && _.has( params, 'module' ) ) {
+                  params.module_id = params.module.id;
+                  params.module = control.prepareModuleForDB( $.extend( true, {}, params.module  ) );
             }
 
             // Inform the the setting if the module is not being added to the collection for the first time,
@@ -5461,7 +5500,7 @@ $.extend( CZRBaseModuleControlMths, {
                   //control.filterModuleCollectionBeforeAjax( to ) returns an array of items
                   //if the module has modOpt, the modOpt object is always added as the first element of the items array (unshifted)
                   api( this.id )
-                        .set( control.filterModuleCollectionBeforeAjax( to ), data );
+                        .set( control.filterModuleCollectionBeforeAjax( to ), params );
                         //.done( function( to, from, o ) {});
             }
       },
@@ -5568,7 +5607,7 @@ $.extend( CZRBaseModuleControlMths, {
             upload    : 'setupImageUploaderSaveAsId',
             upload_url : 'setupImageUploaderSaveAsUrl',
             color     : 'setupColorPicker',
-            wp_color_apha : 'setupColorPickerAlpha',
+            wp_color_alpha : 'setupColorPickerAlpha',
             wp_color  : 'setupWPColorPicker',//not used for the moment
             content_picker : 'setupContentPicker',
             tiny_mce_editor : 'setupTinyMceEditor',
@@ -5576,73 +5615,8 @@ $.extend( CZRBaseModuleControlMths, {
             range : 'setupSimpleRange',
             range_slider : 'setupRangeSlider',
             hidden : '',
-            spacing : function( input_options ) {
-                  var input = this,
-                      $wrapper = $('.sek-spacing-wrapper', input.container );
-
-                  // Listen to user actions on the inputs and set the input value
-                  $wrapper.on( 'change', 'input[type="number"]', function(evt) {
-                        var _type_ = $(this).closest('[data-sek-spacing]').data('sek-spacing'),
-                            _newInputVal = $.extend( true, {}, _.isObject( input() ) ? input() : {} );
-                        _newInputVal[ _type_ ] = $(this).val();
-                        input( _newInputVal );
-                  });
-                  $wrapper.on( 'click', '.reset-spacing-wrap', function(evt) {
-                        evt.preventDefault();
-                        $wrapper.find('input[type="number"]').each( function() {
-                              $(this).val(0);
-                        });
-                  });
-
-                  // Synchronize on init
-                  if ( _.isObject( input() ) ) {
-                        _.each( input(), function( _val_, _key_ ) {
-                              $( '[data-sek-spacing="' + _key_ +'"]', $wrapper ).find( 'input[type="number"]' ).val( _val_ );
-                        });
-                  }
-            },
-            bg_position : function( input_options ) {
-                var input = this;
-                // Listen to user actions on the inputs and set the input value
-                $('.sek-bg-pos-wrapper', input.container ).on( 'change', 'input[type="radio"]', function(evt) {
-                      input( $(this).val() );
-                });
-
-                // Synchronize on init
-                if ( ! _.isEmpty( input() ) ) {
-                      input.container.find('input[value="'+ input() +'"]').attr('checked', true).trigger('click');
-                }
-            },
-            h_alignment : function( input_options ) {
-                var input = this,
-                    $wrapper = $('.sek-h-align-wrapper', input.container );
-                // on init
-                $wrapper.find( 'div[data-sek-align="' + input() +'"]' ).addClass('selected');
-
-                // on click
-                $wrapper.on( 'click', '[data-sek-align]', function(evt) {
-                      evt.preventDefault();
-                      $wrapper.find('.selected').removeClass('selected');
-                      $.when( $(this).addClass('selected') ).done( function() {
-                            input( $(this).data('sek-align') );
-                      });
-                });
-            },
-            v_alignment : function( input_options ) {
-                var input = this,
-                    $wrapper = $('.sek-v-align-wrapper', input.container );
-                // on init
-                $wrapper.find( 'div[data-sek-align="' + input() +'"]' ).addClass('selected');
-
-                // on click
-                $wrapper.on( 'click', '[data-sek-align]', function(evt) {
-                      evt.preventDefault();
-                      $wrapper.find('.selected').removeClass('selected');
-                      $.when( $(this).addClass('selected') ).done( function() {
-                            input( $(this).data('sek-align') );
-                      });
-                });
-            }
+            h_alignment : 'setupHAlignement',
+            h_text_alignment : 'setupHAlignement'
       });
 
 
