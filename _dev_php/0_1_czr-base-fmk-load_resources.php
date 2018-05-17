@@ -21,6 +21,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
 
         // hook : 'customize_controls_enqueue_scripts'
         function ac_load_additional_controls_js() {
+            // Enqueue scripts/styles for the color picker.
+            // Probably already enqueued by the theme controls, but let's make sure they are.
+            wp_enqueue_script( 'wp-color-picker' );
+            wp_enqueue_style( 'wp-color-picker' );
+
             //'czr-customizer-fmk' will be enqueued as a dependency of 'font-customizer-control' only in plugin mode
             wp_enqueue_script(
                 'czr-customizer-fmk',
