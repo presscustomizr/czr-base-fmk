@@ -263,6 +263,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 /* ------------------------------------------------------------------------- */
                 case 'range_slider' :
                   ?>
+                    <# //console.log( 'IN php::ac_get_default_input_tmpl() => data range_slide => ', data ); #>
                     <?php
                     printf( '<input data-czrtype="%5$s" type="range" %1$s %2$s %3$s %4$s value="{{ data[\'%5$s\'] }}" />',
                       ! empty( $input_data['orientation'] ) ? 'data-orientation="'. $input_data['orientation'] .'"' : '',

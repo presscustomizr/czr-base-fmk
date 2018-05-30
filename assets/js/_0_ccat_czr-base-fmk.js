@@ -1027,7 +1027,21 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
       },
 
 
-      //COLORS
+      // BOOLEAN CHECK
+      // @return bool
+      isChecked : function( v ) {
+            if ( _.isBoolean( v ) ) {
+                  return v;
+            } else if ( _.isNumber( v ) ) {
+                  return v > 0;
+            } else if ( _.isString( v ) ) {
+                return '0' !== v && '' !== v && 'off' !== v;
+            }
+            return false;
+      },
+
+
+      // COLORS
       hexToRgb : function( hex ) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -3517,6 +3531,7 @@ $.extend( CZRModuleMths, {
                   //initialize the module api.Value()
                   //constructorOptions has the same structure as the one described in prepareModuleforAPI
                   //setting the module Value won't be listen to at this stage
+                  //api.infoLog('module.isReady.done() => constructorOptions',  constructorOptions);
                   module.initializeModuleModel( constructorOptions )
                         .done( function( initialModuleValue ) {
                               module.set( initialModuleValue );
@@ -5691,7 +5706,6 @@ $.extend( CZRBaseModuleControlMths, {
       api.CZRBaseModuleControl      = api.CZRBaseControl.extend( CZRBaseModuleControlMths );
 
       $.extend( api.controlConstructor, { czr_module : api.CZRBaseModuleControl });
-
 })( wp.customize, jQuery, _ );
 //DOM READY :
 //1) FIRE SPECIFIC INPUT PLUGINS
