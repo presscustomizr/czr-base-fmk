@@ -566,7 +566,10 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
                 'refresh-markup' => null,
                 'refresh-stylesheet' => null,
-                'refresh-fonts' => null
+                'refresh-fonts' => null,
+
+                'sanitize_cb' => '',
+                'validate_cb' => ''
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
