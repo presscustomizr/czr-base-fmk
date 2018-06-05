@@ -1,13 +1,11 @@
 <?php
-namespace czr_fn;
+namespace Nimble;
 
-if ( isset( $GLOBALS['czr_base_fmk_namespace'] ) ) {
-    error_log(' => ' . __FILE__ . ' The czr_base_fmk has already been loaded');
+if ( did_action('nimble_base_fmk_loaded') ) {
+    sek_error_log( __FILE__ . '  => The czr_base_fmk has already been loaded' );
     return;
 }
-// Set the namsepace as a global so we know its already loaded
-global $czr_base_fmk_namespace;
-$czr_base_fmk_namespace = __NAMESPACE__ . '\\';
+do_action( 'nimble_base_fmk_loaded' );
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
 if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
