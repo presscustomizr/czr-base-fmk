@@ -46,8 +46,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
             }
 
             // DEFINITIONS
-            if ( ! defined( 'FMK_BASE_URL' ) ) { define( 'FMK_BASE_URL' , $params['base_url'] ); }
-            if ( ! defined( 'FMK_BASE_VERSION' ) ) { define( 'FMK_BASE_VERSION' , isset( $params['version'] ) ? $params['version'] : '1.0.0' ); }
+            if ( ! defined( 'NIMBLE_FMK_BASE_URL' ) ) { define( 'NIMBLE_FMK_BASE_URL' , $params['base_url'] ); }
+            if ( ! defined( 'NIMBLE_FMK_BASE_VERSION' ) ) { define( 'NIMBLE_FMK_BASE_VERSION' , isset( $params['version'] ) ? $params['version'] : '1.0.0' ); }
 
             // Cache the css attr used in the tmpl builder and in the localized params
             $this -> czr_css_attr = $this -> czr_fmk_get_customizer_controls_css_attr();

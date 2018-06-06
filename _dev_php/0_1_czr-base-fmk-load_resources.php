@@ -32,11 +32,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                 //dev / debug mode mode?
                 sprintf(
                     '%1$s/assets/js/%2$s',
-                    FMK_BASE_URL,
+                    NIMBLE_FMK_BASE_URL,
                     defined('CZR_DEV') && true === CZR_DEV ? '_0_ccat_czr-base-fmk.js' : '_0_ccat_czr-base-fmk.min.js'
                 ),
                 array('customize-controls' , 'jquery', 'underscore'),
-                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                 $in_footer = true
             );
 
@@ -47,11 +47,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                     //dev / debug mode mode?
                     sprintf(
                         '%1$s/assets/js/%2$s',
-                        FMK_BASE_URL,
+                        NIMBLE_FMK_BASE_URL,
                         defined('CZR_DEV') && true === CZR_DEV ? '_1_ccat_czr-theme-fmk.js' : '_1_ccat_czr-theme-fmk.min.js'
                     ),
                     array( 'czr-customizer-fmk' ),
-                    ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                    ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                     $in_footer = true
                 );
             }
@@ -99,9 +99,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
         function ac_load_additional_controls_css() {
             wp_enqueue_style(
                 'czr-fmk-controls-style',
-                sprintf('%1$s/assets/css/czr-ccat-control-base%2$s.css', FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
+                sprintf('%1$s/assets/css/czr-ccat-control-base%2$s.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
                 array( 'customize-controls' ),
-                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                 $media = 'all'
             );
 
@@ -109,17 +109,17 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
             //overriden by some specific style in czr-control-base.css
             wp_enqueue_style(
                 'select2-css',
-                 sprintf('%1$s/assets/css/lib/select2.min.css', FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
+                 sprintf('%1$s/assets/css/lib/select2.min.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
                 array( 'customize-controls' ),
-                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                 $media = 'all'
             );
 
             wp_enqueue_style(
                 'font-awesome',
-                sprintf('%1$s/assets/fonts/css/fontawesome-all.min.css', FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
+                sprintf('%1$s/assets/fonts/css/fontawesome-all.min.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
                 array(),
-                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                 $media = 'all'
             );
         }
@@ -133,11 +133,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                 'czr-customizer-preview' ,
                   sprintf(
                       '%1$s/assets/js/%2$s',
-                      FMK_BASE_URL,
+                      NIMBLE_FMK_BASE_URL,
                       defined('CZR_DEV') && true === CZR_DEV ? 'czr-preview-base.js' : 'czr-preview-base.min.js'
                   ),
                   array( 'customize-preview', 'underscore'),
-                  ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : FMK_BASE_VERSION,
+                  ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                   true
             );
 
