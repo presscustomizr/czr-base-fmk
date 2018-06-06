@@ -2,9 +2,14 @@
 namespace Nimble;
 
 if ( did_action('nimble_base_fmk_loaded') ) {
-    sek_error_log( __FILE__ . '  => The czr_base_fmk has already been loaded' );
+    error_log( __FILE__ . '  => The czr_base_fmk has already been loaded' );
     return;
 }
+
+// Set the namsepace as a global so we can use it when fired from another theme/plugin using the fmk
+global $czr_base_fmk_namespace;
+$czr_base_fmk_namespace = __NAMESPACE__ . '\\';
+
 do_action( 'nimble_base_fmk_loaded' );
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
