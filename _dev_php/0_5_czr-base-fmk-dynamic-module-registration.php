@@ -101,6 +101,8 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             if ( ! is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
               return;
 
+            $wp_scripts = wp_scripts();
+
             // loop on each registered modules
             foreach ( $this->registered_modules as $module_type => $params ) {
                 $params = wp_parse_args( $params, $this -> default_dynamic_module_params );
@@ -109,13 +111,17 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                 // Enqueue the list of registered scripts
                 if ( ! empty( $control_js_params ) ) {
                     foreach ( $control_js_params as $handle => $script_args ) {
-                        wp_enqueue_script(
-                            $handle,
-                            array_key_exists( 'src', $script_args ) ? $script_args['src'] : null,
-                            array_key_exists( 'deps', $script_args ) ? $script_args['deps'] : null,
-                            array_key_exists( 'ver', $script_args ) ? $script_args['ver'] : null,
-                            array_key_exists( 'in_footer', $script_args ) ? $script_args['in_footer'] : false
-                        );
+                        if ( ! isset( $wp_scripts->registered[$handle] ) ) {
+                            wp_enqueue_script(
+                                $handle,
+                                array_key_exists( 'src', $script_args ) ? $script_args['src'] : null,
+                                array_key_exists( 'deps', $script_args ) ? $script_args['deps'] : null,
+                                array_key_exists( 'ver', $script_args ) ? $script_args['ver'] : null,
+                                array_key_exists( 'in_footer', $script_args ) ? $script_args['in_footer'] : false
+                            );
+                        } else {
+                            error_log( __CLASS__ . '::' . __FUNCTION__ . " => handle already registered : " . $handle . " , this asset won't be enqueued => " . $script_args['src'] );
+                        }
                     }
 
                 }
