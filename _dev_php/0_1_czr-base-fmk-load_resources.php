@@ -84,7 +84,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                             'placeholder_image'   => __( 'No image selected', 'text_domain_to_be_replaced' ),
                             'frame_title_image'   => __( 'Select Image', 'text_domain_to_be_replaced' ),
                             'frame_button_image'  => __( 'Choose Image', 'text_domain_to_be_replaced' ),
-                            'isThemeSwitchOn' => true
+
+                            'Customizing' => __('Customizing', 'text_domain_to_be_replaced'),
                       ),
                       'paramsForDynamicRegistration' => apply_filters( 'czr_fmk_dynamic_setting_js_params', array() )
                   )
