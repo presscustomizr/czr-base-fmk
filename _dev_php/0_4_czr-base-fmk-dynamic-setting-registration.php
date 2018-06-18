@@ -14,7 +14,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
 
             // when not dynamically registered
             // TO DEPRECATE ?
-            add_action( 'customize_register', array( $this, 'czr_register_not_dynamic_settings' ), 20 );
+            //add_action( 'customize_register', array( $this, 'czr_register_not_dynamic_settings' ), 20 );
         }
 
 
@@ -126,13 +126,13 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                 // if this is a module setting, it can have specific sanitize and validate callback set for the module
                 // Let's check if the module_type is registered, and if there are any callback set.
                 // If a match is found, we'll use those callback
-                $module = $this -> czr_get_registered_dynamic_module( $params[ 'module_type' ] );
-                if ( false !== $module  && is_array( $module ) ) {
-                    if ( array_key_exists( 'validate_callback', $module ) && function_exists( $module[ 'validate_callback' ] ) ) {
-                        $registered_setting_args[ 'validate_callback' ] = $module[ 'validate_callback' ];
+                $module_params = $this -> czr_get_registered_dynamic_module( $params[ 'module_type' ] );
+                if ( false !== $module_params  && is_array( $module_params ) ) {
+                    if ( array_key_exists( 'validate_callback', $module_params ) && function_exists( $module_params[ 'validate_callback' ] ) ) {
+                        $registered_setting_args[ 'validate_callback' ] = $module_params[ 'validate_callback' ];
                     }
-                    if ( array_key_exists( 'sanitize_callback', $module ) && function_exists( $module[ 'sanitize_callback' ] ) ) {
-                        $registered_setting_args[ 'sanitize_callback' ] = $module[ 'sanitize_callback' ];
+                    if ( array_key_exists( 'sanitize_callback', $module_params ) && function_exists( $module_params[ 'sanitize_callback' ] ) ) {
+                        $registered_setting_args[ 'sanitize_callback' ] = $module_params[ 'sanitize_callback' ];
                     }
                 }
                 //error_log( 'REGISTERING DYNAMICALLY for setting =>'. $setting_id );
@@ -209,9 +209,6 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
             // loop on each registered modules
             foreach ( $this->registered_settings as $registerered_setting_id => $params ) {
                 $params = wp_parse_args( $params, $this -> default_dynamic_setting_params );
-                // The dynamic registration should be explicitely set
-                if ( true !== $params['dynamic_registration'] )
-                  continue;
                 // We need the 'option_value' entry, even if empty
                 if ( ! array_key_exists( 'option_value', $params ) || ! is_array( $params['option_value'] ) )
                   continue;
@@ -223,6 +220,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                 $js_params[ $registerered_setting_id ] = array(
                     'setting_id' => $registerered_setting_id,
                     'module_type' => $params[ 'module_type' ],
+                    'module_registration_params' => $this -> czr_get_registered_dynamic_module( $params[ 'module_type' ] ),
                     'option_value'  => $params['option_value'],
 
                     // 'setting' => array(
