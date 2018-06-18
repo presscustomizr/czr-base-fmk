@@ -29,6 +29,10 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
         //     'tmpl' => array()
         // )
         function czr_pre_register_dynamic_module( $module_params ) {
+            // error_log( '<czr_pre_register_dynamic_module>' );
+            // error_log( print_r( $module_params, true ) );
+            // error_log( '</czr_pre_register_dynamic_module>' );
+
             if ( ! is_array( $module_params ) || empty( $module_params ) ) {
                 error_log( 'czr_pre_register_dynamic_module => empty $module_params submitted' );
                 return;
