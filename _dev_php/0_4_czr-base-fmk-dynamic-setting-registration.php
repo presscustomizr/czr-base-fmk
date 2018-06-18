@@ -90,6 +90,8 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
 
         // hook : 'customize_dynamic_setting_args'
         function czr_setup_customizer_dynamic_setting_args( $setting_args, $setting_id ) {
+            //sek_error_log( __CLASS__ . '::' . __FUNCTION__ ,  $this->registered_settings );
+
             if ( ! is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
               return $setting_args;
 
@@ -98,10 +100,13 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
 
             // loop on each registered modules
             foreach ( $this->registered_settings as $registerered_setting_id => $params ) {
-                $params = wp_parse_args( $params, $this -> default_dynamic_setting_params );
-                if ( true !== $params['dynamic_registration'] ) {
+
+                if ( array_key_exists('dynamic_registration', $params) && true !== $params['dynamic_registration'] ) {
                   continue;
                 }
+
+                $params = wp_parse_args( $params, $this -> default_dynamic_setting_params );
+
                 if ( $registerered_setting_id != $setting_id || empty( $registerered_setting_id ) )
                   continue;
 
