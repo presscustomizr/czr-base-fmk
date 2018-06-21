@@ -1,8 +1,8 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
-    class CZR_Fmk_Base extends CZR_Fmk_Dyn_Setting_Registration {
+if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
+    class CZR_Fmk_Dyn_Module_Registration extends CZR_Fmk_Dyn_Setting_Registration {
 
         //fired in the constructor
         function czr_setup_dynamic_modules_registration() {

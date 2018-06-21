@@ -65,6 +65,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
             // Dynamic Module Registration
             $this -> czr_setup_dynamic_settings_registration();
             $this -> czr_setup_dynamic_modules_registration();
+
+            // Content picker
+            $this -> czr_setup_content_picker_ajax_actions();
         }//__construct
 
 
