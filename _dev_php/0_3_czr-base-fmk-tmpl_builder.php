@@ -211,6 +211,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 /* ------------------------------------------------------------------------- *
                  *  CHECK
                 /* ------------------------------------------------------------------------- */
+                case 'checkbox' :
                 case 'check' :
                   ?>
                     <#
@@ -288,6 +289,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                     printf( '<span data-czrtype="%1$s"></span>', $input_id );
                     ?>
                   <?php
+                break;
+
+                default :
+                    // this input type has no template, this is a problem
+                    wp_send_json_error( 'ERROR => ' . __CLASS__ . '::' . __FUNCTION__ . ' this input type has no template : ' . $input_type );
                 break;
             }//switch
         }
