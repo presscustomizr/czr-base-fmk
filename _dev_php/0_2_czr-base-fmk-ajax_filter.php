@@ -92,7 +92,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
                 case 'rud-item-part' :
                     ?>
                       <div class="<?php echo $css_attr['item_header']; ?> czr-custom-model">
-                        <div class="<?php echo $css_attr['item_title']; ?> <?php echo $css_attr['item_sort_handle']; ?>"><h4>{{ data.title }}</h4></div>
+                        <# if ( ( true === data.is_sortable ) ) { #>
+                          <div class="<?php echo $css_attr['item_title']; ?> <?php echo $css_attr['item_sort_handle']; ?>"><h4>{{ data.title }}</h4></div>
+                        <# } else { #>
+                          <div class="<?php echo $css_attr['item_title']; ?>"><h4>{{ data.title }}</h4></div>
+                        <# } #>
                         <div class="<?php echo $css_attr['item_btns']; ?>"><a title="<?php _e('Edit', 'text_domain_to_be_replaced'); ?>" href="javascript:void(0);" class="fas fa-pencil-alt <?php echo $css_attr['edit_view_btn']; ?>"></a>&nbsp;<a title="<?php _e('Remove', 'text_domain_to_be_replaced'); ?>" href="javascript:void(0);" class="fas fa-trash <?php echo $css_attr['display_alert_btn']; ?>"></a></div>
                         <div class="<?php echo $css_attr['remove_alert_wrapper']; ?>"></div>
                       </div>
