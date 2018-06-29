@@ -123,10 +123,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
             if ( ! empty( $input_data['input_template'] ) && is_string( $input_data['input_template'] ) ) {
                 echo $input_data['input_template'];
             } else {
-
                 // THIS IS WHERE THE ACTUAL INPUT CONTENT IS SET
-                do_action( 'czr_set_input_tmpl_content', $input_type, $input_id, $input_data );
-
+                $this -> ac_set_input_tmpl_content( $input_type, $input_id, $input_data );
             }
             ?>
               </div><?php // class="czr-input" ?>
@@ -147,156 +145,178 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
 
 
-        // hook : ac_set_input_tmpl_content
-        function ac_set_input_tmpl_content( $input_type, $input_id, $input_data ) {
+
+
+
+
+        // fired in ::ac_get_default_input_tmpl();
+        private function ac_set_input_tmpl_content( $input_type, $input_id, $input_data ) {
             $css_attr = $this -> czr_css_attr;
-            switch ( $input_type ) {
-                /* ------------------------------------------------------------------------- *
-                 *  HIDDEN
-                /* ------------------------------------------------------------------------- */
-                case 'hidden':
-                  ?>
-                    <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value=""></input>
-                  <?php
-                break;
+            $input_tmpl_content = null;
 
-                /* ------------------------------------------------------------------------- *
-                 *  SELECT
-                /* ------------------------------------------------------------------------- */
-                case 'select':
-                  ?>
-                    <select data-czrtype="<?php echo $input_id; ?>"></select>
-                  <?php
-                break;
+            // First fires a hook to allow the input content to be remotely set
+            // For example the module_picker, the spacing, h_text_alignment... are printed this way
+            ob_start();
+              do_action( 'czr_set_input_tmpl_content', $input_type, $input_id, $input_data );
+            $input_tmpl_content = ob_get_clean();
 
-                /* ------------------------------------------------------------------------- *
-                 *  TEXT
-                /* ------------------------------------------------------------------------- */
-                case 'text' :
-                  ?>
-                    <input data-czrtype="<?php echo $input_id; ?>" type="text" value="" placeholder="<?php echo $input_data['placeholder']; ?>"></input>
-                  <?php
-                break;
+            if ( ! empty( $input_tmpl_content ) ) {
+                echo $input_tmpl_content;
+            } else {
+                // Then, if we have no content yet, let's go thought the default input cases
+                switch ( $input_type ) {
+                    /* ------------------------------------------------------------------------- *
+                     *  HIDDEN
+                    /* ------------------------------------------------------------------------- */
+                    case 'hidden':
+                      ?>
+                        <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value=""></input>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  NUMBER
-                /* ------------------------------------------------------------------------- */
-                case 'number' :
-                  ?>
-                    <?php
-                    printf( '<input data-czrtype="%4$s" type="number" %1$s %2$s %3$s value="{{ data[\'%4$s\'] }}" />',
-                      ! empty( $input_data['step'] ) ? 'step="'. $input_data['step'] .'"' : '',
-                      ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
-                      ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
-                      $input_id
-                    );
-                    ?>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  SELECT
+                    /* ------------------------------------------------------------------------- */
+                    case 'select':
+                      ?>
+                        <select data-czrtype="<?php echo $input_id; ?>"></select>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  COLOR
-                /* ------------------------------------------------------------------------- */
-                case 'wp_color_alpha' :
-                  ?>
-                    <input data-czrtype="<?php echo $input_id; ?>" class="width-100"  data-alpha="true" type="text" value="{{ data['<?php echo $input_id; ?>'] }}"></input>
-                  <?php
-                break;
-                case 'color' :
-                  ?>
-                    <input data-czrtype="<?php echo $input_id; ?>" type="text" value="{{ data['<?php echo $input_id; ?>'] }}"></input>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  TEXT
+                    /* ------------------------------------------------------------------------- */
+                    case 'text' :
+                      ?>
+                        <input data-czrtype="<?php echo $input_id; ?>" type="text" value="" placeholder="<?php echo $input_data['placeholder']; ?>"></input>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  CHECK
-                /* ------------------------------------------------------------------------- */
-                case 'checkbox' :
-                case 'check' :
-                  ?>
-                    <#
-                      var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
-                    #>
-                    <input data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}></input>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  NUMBER
+                    /* ------------------------------------------------------------------------- */
+                    case 'number' :
+                      ?>
+                        <?php
+                        printf( '<input data-czrtype="%4$s" type="number" %1$s %2$s %3$s value="{{ data[\'%4$s\'] }}" />',
+                          ! empty( $input_data['step'] ) ? 'step="'. $input_data['step'] .'"' : '',
+                          ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
+                          ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
+                          $input_id
+                        );
+                        ?>
+                      <?php
+                    break;
 
-                case 'gutencheck' :
-                    ?>
-                      <#
-                        var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
-                      #>
-                      <span class="czr-toggle-check"><input class="czr-toggle-check__input" id="pending-toggle-0" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
-                    <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  COLOR
+                    /* ------------------------------------------------------------------------- */
+                    case 'wp_color_alpha' :
+                      ?>
+                        <input data-czrtype="<?php echo $input_id; ?>" class="width-100"  data-alpha="true" type="text" value="{{ data['<?php echo $input_id; ?>'] }}"></input>
+                      <?php
+                    break;
+                    case 'color' :
+                      ?>
+                        <input data-czrtype="<?php echo $input_id; ?>" type="text" value="{{ data['<?php echo $input_id; ?>'] }}"></input>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  TEXTAREA
-                /* ------------------------------------------------------------------------- */
-                case 'textarea' :
-                  ?>
-                    <textarea data-czrtype="<?php echo $input_id; ?>" class="width-100" name="textarea" rows="10" cols="">{{ data.value }}</textarea>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  CHECK
+                    /* ------------------------------------------------------------------------- */
+                    case 'checkbox' :
+                    case 'check' :
+                      ?>
+                        <#
+                          var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
+                        #>
+                        <input data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}></input>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  IMG UPLOAD AND UPLOAD URL
-                /* ------------------------------------------------------------------------- */
-                case 'upload' :
-                case 'upload_url' :
-                  ?>
-                    <input data-czrtype="<?php echo $input_id; ?>" type="hidden"/>
-                    <div class="<?php echo $css_attr['img_upload_container']; ?>"></div>
-                  <?php
-                break;
+                    case 'gutencheck' :
+                        ?>
+                          <#
+                            var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
+                          #>
+                          <span class="czr-toggle-check"><input class="czr-toggle-check__input" id="pending-toggle-0" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
+                        <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  TINY MCE EDITOR
-                /* ------------------------------------------------------------------------- */
-                case 'tiny_mce_editor' :
-                    ?>
-                      <# //console.log( 'IN php::ac_get_default_input_tmpl() => data sent to the tmpl => ', data ); #>
-                      <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_domain_to_be_replaced' ); ?></button>&nbsp;
-                      <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Close', 'text_domain_to_be_replaced' ); ?></button>
-                      <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value="{{ data.value }}"/>
-                    <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  TEXTAREA
+                    /* ------------------------------------------------------------------------- */
+                    case 'textarea' :
+                      ?>
+                        <textarea data-czrtype="<?php echo $input_id; ?>" class="width-100" name="textarea" rows="10" cols="">{{ data.value }}</textarea>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  RANGE
-                /* ------------------------------------------------------------------------- */
-                case 'range_slider' :
-                  ?>
-                    <# //console.log( 'IN php::ac_get_default_input_tmpl() => data range_slide => ', data ); #>
-                    <?php
-                    printf( '<input data-czrtype="%5$s" type="range" %1$s %2$s %3$s %4$s value="{{ data[\'%5$s\'] }}" />',
-                      ! empty( $input_data['orientation'] ) ? 'data-orientation="'. $input_data['orientation'] .'"' : '',
-                      ! empty( $input_data['unit'] ) ? 'data-unit="'. $input_data['unit'] .'"' : '',
-                      ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
-                      ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
-                      $input_id
-                    );
-                    ?>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  IMG UPLOAD AND UPLOAD URL
+                    /* ------------------------------------------------------------------------- */
+                    case 'upload' :
+                    case 'upload_url' :
+                      ?>
+                        <input data-czrtype="<?php echo $input_id; ?>" type="hidden"/>
+                        <div class="<?php echo $css_attr['img_upload_container']; ?>"></div>
+                      <?php
+                    break;
 
-                /* ------------------------------------------------------------------------- *
-                 *  CONTENT PICKER
-                /* ------------------------------------------------------------------------- */
-                case 'content_picker' :
-                  ?>
-                    <?php
-                    printf( '<span data-czrtype="%1$s"></span>', $input_id );
-                    ?>
-                  <?php
-                break;
+                    /* ------------------------------------------------------------------------- *
+                     *  TINY MCE EDITOR
+                    /* ------------------------------------------------------------------------- */
+                    case 'tiny_mce_editor' :
+                        ?>
+                          <# //console.log( 'IN php::ac_get_default_input_tmpl() => data sent to the tmpl => ', data ); #>
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_domain_to_be_replaced' ); ?></button>&nbsp;
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Close', 'text_domain_to_be_replaced' ); ?></button>
+                          <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value="{{ data.value }}"/>
+                        <?php
+                    break;
 
-                default :
-                    // this input type has no template, this is a problem
-                    wp_send_json_error( 'ERROR => ' . __CLASS__ . '::' . __FUNCTION__ . ' this input type has no template : ' . $input_type );
-                break;
-            }//switch
-        }
+                    /* ------------------------------------------------------------------------- *
+                     *  RANGE
+                    /* ------------------------------------------------------------------------- */
+                    case 'range_slider' :
+                      ?>
+                        <# //console.log( 'IN php::ac_get_default_input_tmpl() => data range_slide => ', data ); #>
+                        <?php
+                        printf( '<input data-czrtype="%5$s" type="range" %1$s %2$s %3$s %4$s value="{{ data[\'%5$s\'] }}" />',
+                          ! empty( $input_data['orientation'] ) ? 'data-orientation="'. $input_data['orientation'] .'"' : '',
+                          ! empty( $input_data['unit'] ) ? 'data-unit="'. $input_data['unit'] .'"' : '',
+                          ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
+                          ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
+                          $input_id
+                        );
+                        ?>
+                      <?php
+                    break;
+
+                    /* ------------------------------------------------------------------------- *
+                     *  CONTENT PICKER
+                    /* ------------------------------------------------------------------------- */
+                    case 'content_picker' :
+                      ?>
+                        <?php
+                        printf( '<span data-czrtype="%1$s"></span>', $input_id );
+                        ?>
+                      <?php
+                    break;
+
+                    /* ------------------------------------------------------------------------- *
+                     *  PROBLEM : if we reach this case, it means that
+                     *  - the input template has not been populated by the first do_action('czr_set_input_tmpl_content')
+                     *  - no default input template is defined for the requested input type
+                    /* ------------------------------------------------------------------------- */
+                    default :
+                        // this input type has no template, this is a problem
+                        wp_send_json_error( 'ERROR => ' . __CLASS__ . '::' . __FUNCTION__ . ' this input type has no template : ' . $input_type );
+                    break;
+                }//switch ( $input_type ) {
+            }//if ( empty( $input_tmpl_content ) )()
+        }//function()
 
     }//class
 endif;
