@@ -8,8 +8,8 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         function czr_setup_dynamic_modules_registration() {
             // Dynamic Module Registration
             add_action( 'init', array( $this, 'czr_schedule_ajax_tmpl' ) );
-            // Enqueue the module assets
-            add_action( 'customize_controls_enqueue_scripts' , array( $this, 'czr_register_dynamic_modules_assets' ) );
+            // Enqueue the module customizer control assets
+            add_action( 'customize_controls_enqueue_scripts' , array( $this, 'czr_register_dynamic_modules_customizer_control_assets' ) );
         }
 
 
@@ -101,7 +101,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         //         )
         //     )
         // ),
-        function czr_register_dynamic_modules_assets() {
+        function czr_register_dynamic_modules_customizer_control_assets() {
             if ( ! is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
               return;
 
