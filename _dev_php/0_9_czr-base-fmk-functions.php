@@ -17,6 +17,25 @@ function czr_get_parent_theme_slug() {
     return sanitize_file_name( strtolower( $theme_slug ) );
 }
 
+
+//@return boolean
+function czr_is_multi_item_module( $module_type ) {
+    $is_multi_item = false;
+    $module_params = CZR_Fmk_Base() -> czr_get_registered_dynamic_module( $module_type );
+    if ( is_array( $module_params ) ) {
+        if ( array_key_exists( 'is_crud', $module_params ) ) {
+            $is_multi_item = (bool)$module_params['is_crud'];
+        }
+        if ( array_key_exists( 'is_multi_item', $module_params ) ) {
+            $is_multi_item = (bool)$module_params['is_multi_item'];
+        }
+    }
+    return $is_multi_item;
+}
+
+
+
+
 //Creates a new instance
 //@params ex :
 //array(
