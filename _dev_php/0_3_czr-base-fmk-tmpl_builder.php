@@ -177,6 +177,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                     /* ------------------------------------------------------------------------- *
                      *  SELECT
                     /* ------------------------------------------------------------------------- */
+                    case 'czr_layouts'://<= specific to the hueman theme
                     case 'select':
                       ?>
                         <select data-czrtype="<?php echo $input_id; ?>"></select>
