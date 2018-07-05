@@ -117,7 +117,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
             );
 
             wp_enqueue_style(
-                'font-awesome',
+                'czr-font-awesome',
                 sprintf('%1$s/assets/fonts/css/fontawesome-all.min.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
                 array(),
                 ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
