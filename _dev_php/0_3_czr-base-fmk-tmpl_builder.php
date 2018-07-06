@@ -36,6 +36,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'title_width' => '',//width-80
                 'input_width' => '',//width-20
 
+                'code_type'   => '',//<= used for to specify the language type of the codemirror editor (if not specified full a html editor will be instantiated)
+
                 'refresh-markup' => null,
                 'refresh-stylesheet' => null,
                 'refresh-fonts' => null,
