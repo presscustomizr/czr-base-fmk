@@ -43,7 +43,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'refresh-fonts' => null,
 
                 'sanitize_cb' => '',
-                'validate_cb' => ''
+                'validate_cb' => '',
+
+                'css_selectors' => array() //<= used to specify css selectors on which we will apply the dynamically generated css for a given input id @see \Nimble\sek_add_css_rules_for_generic_css_input_types'
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
