@@ -45,25 +45,27 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'sanitize_cb' => '',
                 'validate_cb' => '',
 
-                'css_selectors' => array() //<= used to specify css selectors on which we will apply the dynamically generated css for a given input id @see \Nimble\sek_add_css_rules_for_generic_css_input_types'
+                'css_selectors' => array(), //<= used to specify css selectors on which we will apply the dynamically generated css for a given input id @see \Nimble\sek_add_css_rules_for_generic_css_input_types'
+                'css_identifier' => '',//<= the identifier allowing us to map a css generation rule. @see \Nimble\sek_add_css_rules_for_css_sniffed_input_id
+                'important_input_list' => array()//<= the list of input_id that an important input can flag !important @see \Nimble\sek_add_css_rules_for_css_sniffed_input_id
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
-                    wp_send_json_error( 'ac_generate_czr_tmpl_from_map => wrong input id' );
+                    wp_send_json_error( __FUNCTION__ . ' => wrong input id' );
                     break;
                 }
                 if ( ! is_array( $input_data ) ) {
-                    wp_send_json_error( 'ac_generate_czr_tmpl_from_map => wrong var type for the input_data of input id : ' . $input_id );
+                    wp_send_json_error( __FUNCTION__ . ' => wrong var type for the input_data of input id : ' . $input_id );
                     break;
                 }
                 // check that we have no unknown entries in the provided input_data
                 $maybe_diff = array_diff_key( $input_data, $default_input_entries );
                 if ( ! empty( $maybe_diff ) ) {
-                    error_log('<ac_generate_czr_tmpl_from_map>');
-                    error_log( '=> at least one unknow entry in the input data for input id : ' . $input_id );
+                    error_log('<' . __FUNCTION__ . '>');
+                    error_log( '=> at least one unknown param in the registered input params for input id : ' . $input_id );
                     error_log( print_r( $maybe_diff, true ) );
-                    error_log('</ac_generate_czr_tmpl_from_map>');
-                    wp_send_json_error( 'ac_generate_czr_tmpl_from_map => at least one unknow entry in the input data for input id : ' . $input_id );
+                    error_log('</' . __FUNCTION__ . '>');
+                    //wp_send_json_error( 'ac_generate_czr_tmpl_from_map => at least one unknow entry in the input data for input id : ' . $input_id );
                     break;
                 }
 
