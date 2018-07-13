@@ -20,6 +20,10 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'notice_after' => '',
                 'placeholder' => '',
 
+                //Textarea
+                'rows' => '5',
+                'cols' => '',
+
                 // typically used for the number and range inputs
                 'step' => '',
                 'min' => '',
@@ -250,9 +254,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                      *  TEXTAREA
                     /* ------------------------------------------------------------------------- */
                     case 'textarea' :
-                      ?>
-                        <textarea data-czrtype="<?php echo $input_id; ?>" class="width-100" name="textarea" rows="10" cols="">{{ data.value }}</textarea>
-                      <?php
+                        printf( '<textarea data-czrtype="%1$s" class="width-100" name="textarea"%2$s%3$s>{{ data.value }}</textarea>',
+                          $input_id,
+                          ! empty( $input_data['rows'] ) ? ' rows="'. $input_data['rows'] .'"' : '',
+                          ! empty( $input_data['cols'] ) ? ' cols="'. $input_data['cols'] .'"' : ''
+                        );
                     break;
 
                     /* ------------------------------------------------------------------------- *
