@@ -38,9 +38,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
                 'code_type'   => '',//<= used for to specify the language type of the codemirror editor (if not specified full a html editor will be instantiated)
 
-                'refresh-markup' => null,
-                'refresh-stylesheet' => null,
-                'refresh-fonts' => null,
+                'refresh_markup' => null,
+                'refresh_stylesheet' => null,
+                'refresh_fonts' => null,
 
                 'sanitize_cb' => '',
                 'validate_cb' => '',
@@ -102,17 +102,12 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
             ob_start();
             // <INPUT WRAPPER>
-            printf( '<div class="%1$s %2$s %3$s" data-input-type="%4$s" %5$s %6$s %7$s %8$s>',
+            printf( '<div class="%1$s %2$s %3$s" data-input-type="%4$s" %5$s>',
                 $css_attr['sub_set_wrapper'],
                 $is_width_100 ? 'width-100' : '',
                 'hidden' === $input_type ? 'hidden' : '',
                 $input_type,
-                ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : '',
-                // introduced for Nimble
-                // allows us to fine tune the ajax action on input change
-                ! is_null( $input_data['refresh-markup'] ) ? 'data-refresh-markup="'. (int)$input_data['refresh-markup'] .'"' : '',
-                ! is_null( $input_data['refresh-stylesheet'] ) ? 'data-refresh-stylesheet="'. (int)$input_data['refresh-stylesheet'] .'"' : '',
-                ! is_null( $input_data['refresh-fonts'] ) ? 'data-refresh-fonts="'. (int)$input_data['refresh-fonts'] .'"' : ''
+                ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : ''
             );
             // no need to print a title for an hidden input
             if ( $input_type !== 'hidden' ) {
