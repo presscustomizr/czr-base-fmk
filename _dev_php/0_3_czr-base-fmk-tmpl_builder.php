@@ -246,7 +246,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                           <#
                             var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
                           #>
-                          <span class="czr-toggle-check"><input class="czr-toggle-check__input" id="pending-toggle-0" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
+                          <span class="czr-toggle-check"><input class="czr-toggle-check__input" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
                         <?php
                     break;
 
