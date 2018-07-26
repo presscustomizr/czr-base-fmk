@@ -41,6 +41,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'refresh_markup' => null,
                 'refresh_stylesheet' => null,
                 'refresh_fonts' => null,
+                'refresh_preview' => null,
 
                 'sanitize_cb' => '',
                 'validate_cb' => '',
