@@ -52,7 +52,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
                 'choices' => array(), // <= used to declare the option list of a select input
 
-                'has_device_switcher' => false // <= indicates if the input value shall be saved by device or not
+                'has_device_switcher' => false, // <= indicates if the input value shall be saved by device or not
+
+                'scope' => 'local'// <= used when resetting the sections
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
