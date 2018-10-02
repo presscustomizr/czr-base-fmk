@@ -563,16 +563,23 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
                 'code_type'   => '',//<= used for to specify the language type of the codemirror editor (if not specified full a html editor will be instantiated)
 
-                'refresh-markup' => null,
-                'refresh-stylesheet' => null,
-                'refresh-fonts' => null,
+                'refresh_markup' => null,
+                'refresh_stylesheet' => null,
+                'refresh_fonts' => null,
+                'refresh_preview' => null,
 
                 'sanitize_cb' => '',
                 'validate_cb' => '',
 
                 'css_selectors' => array(), //<= used to specify css selectors on which we will apply the dynamically generated css for a given input id @see \Nimble\sek_add_css_rules_for_generic_css_input_types'
                 'css_identifier' => '',//<= the identifier allowing us to map a css generation rule. @see \Nimble\sek_add_css_rules_for_css_sniffed_input_id
-                'important_input_list' => array()//<= the list of input_id that an important input can flag !important @see \Nimble\sek_add_css_rules_for_css_sniffed_input_id
+                'important_input_list' => array(),//<= the list of input_id that an important input can flag !important @see \Nimble\sek_add_css_rules_for_css_sniffed_input_id
+
+                'choices' => array(), // <= used to declare the option list of a select input
+
+                'has_device_switcher' => false, // <= indicates if the input value shall be saved by device or not
+
+                'scope' => 'local'// <= used when resetting the sections
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
@@ -627,17 +634,12 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
             ob_start();
             // <INPUT WRAPPER>
-            printf( '<div class="%1$s %2$s %3$s" data-input-type="%4$s" %5$s %6$s %7$s %8$s>',
+            printf( '<div class="%1$s %2$s %3$s" data-input-type="%4$s" %5$s>',
                 $css_attr['sub_set_wrapper'],
                 $is_width_100 ? 'width-100' : '',
                 'hidden' === $input_type ? 'hidden' : '',
                 $input_type,
-                ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : '',
-                // introduced for Nimble
-                // allows us to fine tune the ajax action on input change
-                ! is_null( $input_data['refresh-markup'] ) ? 'data-refresh-markup="'. (int)$input_data['refresh-markup'] .'"' : '',
-                ! is_null( $input_data['refresh-stylesheet'] ) ? 'data-refresh-stylesheet="'. (int)$input_data['refresh-stylesheet'] .'"' : '',
-                ! is_null( $input_data['refresh-fonts'] ) ? 'data-refresh-fonts="'. (int)$input_data['refresh-fonts'] .'"' : ''
+                ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : ''
             );
             // no need to print a title for an hidden input
             if ( $input_type !== 'hidden' ) {
@@ -772,7 +774,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                           <#
                             var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
                           #>
-                          <span class="czr-toggle-check"><input class="czr-toggle-check__input" id="pending-toggle-0" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
+                          <span class="czr-toggle-check"><input class="czr-toggle-check__input" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
                         <?php
                     break;
 
@@ -803,7 +805,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                         ?>
                           <# //console.log( 'IN php::ac_get_default_input_tmpl() => data sent to the tmpl => ', data ); #>
                           <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_domain_to_be_replaced' ); ?></button>&nbsp;
-                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Close', 'text_domain_to_be_replaced' ); ?></button>
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Hide editor', 'text_domain_to_be_replaced' ); ?></button>
                           <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value="{{ data.value }}"/>
                         <?php
                     break;
@@ -812,6 +814,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                      *  RANGE
                     /* ------------------------------------------------------------------------- */
                     case 'range_slider' :
+                    case 'range' :
                       ?>
                         <# //console.log( 'IN php::ac_get_default_input_tmpl() => data range_slide => ', data ); #>
                         <?php

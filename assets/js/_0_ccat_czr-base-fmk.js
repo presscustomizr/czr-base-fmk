@@ -672,21 +672,6 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
                             module        : module
                       };
 
-                  // introduced for Nimble
-                  // allows us to fine tune the ajax action on input change
-                  // the input constructor args, are stored in each input instance as input.constructorOptions @see Input::initialize()
-                  // the on input change, the constructor options are passed as params when setting the api.Value(to, from, params )
-                  // This can be used when listening to the associated setting of the parent module.
-                  if ( ! _.isUndefined( $(this).data( 'refresh-markup' ) ) ) {
-                        _inputArgs.refresh_markup = $(this).data( 'refresh-markup' );
-                  }
-                  if ( ! _.isUndefined( $(this).data( 'refresh-stylesheet' ) ) ) {
-                        _inputArgs.refresh_stylesheet = $(this).data( 'refresh-stylesheet' );
-                  }
-                  if ( ! _.isUndefined( $(this).data( 'refresh-fonts' ) ) ) {
-                        _inputArgs.refresh_fonts = $(this).data( 'refresh-fonts' );
-                  }
-
                   // ALLOW PLUGINS TO FILTER THE INPUT ARGS BEFORE INSTANTIATION
                   api.trigger( 'input-args-before-instantiation', _inputArgs );
 
@@ -775,6 +760,16 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
                                     //console.log( 'api.CZR_Helpers.getModuleTmpl => ', _r_ );
                                     api.errare( 'api.CZR_Helpers.getModuleTmpl => Problem when fetching the ' + args.tmpl + ' tmpl from server for module : ' + args.module_id + ' ' + args.module_type, _r_);
                                     dfd.reject( _r_ );
+                                    // Nimble => display an error notification when
+                                    // - session has expired
+                                    // - when statusText is "Bad Request"
+                                    if ( _.isObject( _r_ ) ) {
+                                          if ( 'invalid_nonce' === _r_.code || 'Bad Request' === _r_.statusText ) {
+                                                if ( window.sektionsLocalizedData && sektionsLocalizedData.i18n ) {
+                                                      api.previewer.trigger( 'sek-notify', { type : 'error', duration : 30000, message : sektionsLocalizedData.i18n['Something went wrong, please refresh this page.'] });
+                                                }
+                                          }
+                                    }
                               });
                   }
             }
@@ -789,6 +784,15 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
 (function (api, $, _) {
       api.CZR_Helpers = api.CZR_Helpers || {};
       api.CZR_Helpers = $.extend( api.CZR_Helpers, {
+            // @params {}. Example :
+            // origin : 'nimble',
+            // what : 'section',
+            // id : params.id,
+            // title: sektionsLocalizedData.i18n['Content for'] + ' ' + moduleName,
+            // panel : sektionsLocalizedData.sektionsPanelId,
+            // priority : 1000,
+            // track : false//don't register in the self.registered()
+            // constructWith : MainSectionConstructor,
             register : function( params ) {
                   if ( ! _.has( params, 'id' ) ) {
                         api.errare( 'register => missing id ', params );
@@ -879,7 +883,7 @@ api.CZR_Helpers = $.extend( api.CZR_Helpers, {
                               }
 
                               if ( api.section.has( params.id ) ) {
-                                    //api.errare( 'registerSection => ' + params.id + ' is already registered');
+                                    //api.infoLog( 'registerSection => ' + params.id + ' is already registered');
                                     break;
                               }
 
@@ -981,6 +985,8 @@ api.CZR_Helpers = api.CZR_Helpers || {};
 //@event map = [ {event1}, {event2}, ... ]
 //@new_event = {  trigger   : event name , actions   : [ 'cb1', 'cb2', ... ] }
 api.CZR_Helpers = $.extend( api.CZR_Helpers, {
+      css_loader_html : '<div class="czr-css-loader czr-mr-loader" style="display:none"><div></div><div></div><div></div></div>',
+
       //While a control should always have a default setting,
       //It can have additional setting assigned
       //This method returns the default setting or the specified type if requested
@@ -1632,9 +1638,13 @@ $.extend( CZRInputMths , {
           if ( api.czrInputMap && _.has( api.czrInputMap, input.type ) ) {
                 var _meth = api.czrInputMap[ input.type ];
                 if ( _.isFunction( input[_meth]) ) {
-                      input[_meth]( options.input_options || null );
+                      try { input[_meth]( options.input_options || null ); } catch( er ) {
+                            api.errare( 'Error in input init => for input id :' + input.id + ' in module type : ' + input.module.module_type, er );
+                      }
                 } else if ( _.isFunction( api.czrInputMap[ input.type ] ) ) {
-                      api.czrInputMap[ input.type ].apply( input, [ options.input_options || null ] );
+                      try { api.czrInputMap[ input.type ].apply( input, [ options.input_options || null ] ); } catch( er ) {
+                            api.errare( 'Error in input init => for input id :' + input.id + ' in module type : ' + input.module.module_type, er );
+                      }
                 }
           } else {
                 api.errare('Warning the input : ' + input.id + ' with type ' + input.type + ' has no corresponding method defined in api.czrInputMap.');
@@ -1646,10 +1656,11 @@ $.extend( CZRInputMths , {
           input.visible = new api.Value( true );
           input.isReady.done( function() {
                 input.visible.bind( function( visible ) {
-                      if ( visible )
-                        input.container.stop( true, true ).slideDown( 200 );
-                      else
-                        input.container.stop( true, true ).slideUp( 200 );
+                      if ( visible ) {
+                            input.container.stop( true, true ).slideDown( 200 );
+                      } else {
+                            input.container.stop( true, true ).slideUp( 200 );
+                      }
                 });
           });
 
@@ -1661,12 +1672,13 @@ $.extend( CZRInputMths , {
                       input.container.toggleClass( 'disabled', ! enabled );
                 });
           });
-
     },
 
 
-    //this method is not fired automatically
-    //It has to be invoked once the input has been instanciated.
+    // this method is not fired automatically
+    // It has to be invoked once the input has been instantiated
+    // input instantiation is performed from what is found in the DOM
+    // @see api.CZR_Helpers.setupInputCollectionFromDOM
     ready : function() {
             var input = this;
             input.setupDOMListeners( input.input_event_map , { dom_el : input.container }, input );
@@ -1692,9 +1704,9 @@ $.extend( CZRInputMths , {
 
           //@hack => todo
           //for text area inputs, the synchronizer is buggy
-          if ( is_textarea ) {
-                api.errorLog('TO DO : THE TEXTAREA INPUT ARE NOT IMPLEMENTED YET IN THE SYNCHRONIZER!');
-          }
+          // if ( is_textarea ) {
+          //       api.errorLog('TO DO : THE TEXTAREA INPUT ARE NOT IMPLEMENTED YET IN THE SYNCHRONIZER!');
+          // }
 
           var syncElement = new api.Element( $_input_el );
           input_parent.syncElements = input_parent.syncElements || {};
@@ -2559,7 +2571,7 @@ $.extend( CZRItemMths , {
                         name      : 'tab_nav',
                         actions   : function( args ) {
                               //toggleTabVisibility is declared in the module ctor and its "this" is the item or the modOpt
-                              var tabIdSwitchedTo = $( args.dom_event.currentTarget, args.dom_el ).attr('data-tab-id');
+                              var tabIdSwitchedTo = $( args.dom_event.currentTarget, args.dom_el ).data('tab-id');
                               this.module.toggleTabVisibility.call( this, tabIdSwitchedTo );
                               this.trigger( 'tab-switch', { id : tabIdSwitchedTo } );
                         }
@@ -2788,11 +2800,11 @@ $.extend( CZRItemMths , {
 
             $.when( item.renderItemWrapper() ).done( function( $_container ) {
                   item.container = $_container;
-                  if ( _.isUndefined(item.container) || ! item.container.length ) {
-                      throw new Error( 'In mayBeRenderItemWrapper the Item view has not been rendered : ' + item.id );
+                  if ( _.isUndefined( item.container ) || ! item.container.length ) {
+                        throw new Error( 'In mayBeRenderItemWrapper the Item view has not been rendered : ' + item.id );
                   } else {
-                      //say it
-                      item.embedded.resolve();
+                        //say it
+                        item.embedded.resolve();
                   }
             });
       },
@@ -2890,6 +2902,7 @@ $.extend( CZRItemMths , {
             return dfd.promise();
       },
 
+
       // fired when item is ready and embedded
       // define the item view DOM event map
       // bind actions when the item is embedded
@@ -2897,30 +2910,34 @@ $.extend( CZRItemMths , {
             var item = this,
                 module = this.module;
 
-            //_item_model_ = item() || item.initial_item_model;//could not be set yet
+            // _item_model_ = item() || item.initial_item_model;//could not be set yet
 
             // Let's create a deep copy now
             item_model = item() || item.initial_item_model;//$.extend( true, {}, _item_model_ );
 
-            //always write the title
+            // always write the title
             item.writeItemViewTitle();
 
 
-            //When do we render the item content ?
-            //If this is a multi-item module, let's render each item content when they are expanded.
-            //In the case of a single item module, we can render the item content now.
+            // When do we render the item content ?
+            // If this is a multi-item module, let's render each item content when they are expanded.
+            // In the case of a single item module, we can render the item content now.
             var _updateItemContentDeferred = function( $_item_content, to, from ) {
                   //update the $.Deferred state
                   if ( ! _.isUndefined( $_item_content ) && false !== $_item_content.length ) {
                         item.contentContainer = $_item_content;
+                        // The 'contentRendered' event triggers the api.CZR_Helpers.setupInputCollectionFromDOM.call( item );
                         item.trigger( 'contentRendered', { item_content : $_item_content } );
-                        item.toggleItemExpansion( to, from );
+                        item.toggleItemExpansion( to, item.module.isMultiItem() ? 150 : 0 );//the second param is the duration
+                        item.cleanLoader();
+
                   }
                   else {
                         throw new Error( 'Module : ' + item.module.id + ', the item content has not been rendered for ' + item.id );
                   }
             };
 
+            // MULTI-ITEM MODULE
             if ( item.module.isMultiItem() ) {
                   item.viewState.callbacks.add( function( to, from ) {
                         //viewState can take 3 states : expanded, expanded_noscroll, closed
@@ -2938,8 +2955,9 @@ $.extend( CZRItemMths , {
                               //item already rendered ?
                               if ( _.isObject( item.contentContainer ) && false !== item.contentContainer.length ) {
                                     //toggle on view state change
-                                    item.toggleItemExpansion(to, from );
+                                    item.toggleItemExpansion(to);
                               } else {
+                                    item.printLoader();
                                     item.renderItemContent( item() || item.initial_item_model )
                                           .done( function( $_item_content ) {
                                                 //introduce a small delay to give some times to the modules to be printed.
@@ -2953,7 +2971,7 @@ $.extend( CZRItemMths , {
                               }
                         } else {
                               //toggle on view state change
-                              item.toggleItemExpansion( to, from ).done( function() {
+                              item.toggleItemExpansion( to ).done( function() {
                                     if ( _.isObject( item.contentContainer ) && false !== item.contentContainer.length ) {
                                           item.trigger( 'beforeContenRemoved' );
                                           //Removes DOM input nodes
@@ -2970,13 +2988,15 @@ $.extend( CZRItemMths , {
                               });
                         }
                   });
-            } else {
+            }
+            // SINGLE ITEM MODULE
+            else {
                   //react to the item state changes
                   item.viewState.callbacks.add( function( to, from ) {
                         //toggle on view state change
-                        item.toggleItemExpansion.apply(item, arguments );
+                        item.toggleItemExpansion.apply( item, [ to, 0 ] );
                   });
-
+                  item.printLoader();
                   //renderview content now for a single item module
                   item.renderItemContent( item_model )
                         .done( function( $_item_content ) {
@@ -3069,10 +3089,11 @@ $.extend( CZRItemMths , {
                         if ( visible )
                           module._adjustScrollExpandedBlock( item.container );
                   };
-                  if ( visible )
-                    $_alert_el.stop( true, true ).slideDown( 200, function() { _slideComplete( visible ); } );
-                  else
-                    $_alert_el.stop( true, true ).slideUp( 200, function() { _slideComplete( visible ); } );
+                  if ( visible ) {
+                        $_alert_el.stop( true, true ).slideDown( 200, function() { _slideComplete( visible ); } );
+                  } else {
+                        $_alert_el.stop( true, true ).slideUp( 200, function() { _slideComplete( visible ); } );
+                  }
             });//item.removeDialogVisible.bind()
       },//itemWrapperViewSetup
 
@@ -3180,9 +3201,9 @@ $.extend( CZRItemMths , {
       },
 
 
-      //callback of item.viewState.callbacks
-      //viewState can take 3 states : expanded, expanded_noscroll, closed
-      toggleItemExpansion : function( status, from, duration ) {
+      // callback of item.viewState.callbacks
+      // viewState can take 3 states : expanded, expanded_noscroll, closed
+      toggleItemExpansion : function( status, duration ) {
             var visible = 'closed' != status,
                 item = this,
                 module = this.module,
@@ -3211,11 +3232,11 @@ $.extend( CZRItemMths , {
 
                       dfd.resolve();
                 };
-
+            duration = _.isUndefined( duration ) ? 150 : duration;
             if ( visible ) {
-                  $el.stop( true, true ).slideDown( duration || 200, function() { _slideComplete( visible ); } );
+                  $el.stop( true, true ).slideDown( duration, function() { _slideComplete( visible ); } );
             } else {
-                  $el.stop( true, true ).slideUp( 200, function() { _slideComplete( visible ); } );
+                  $el.stop( true, true ).slideUp( 0, function() { _slideComplete( visible ); } );
             }
 
             return dfd.promise();
@@ -3230,7 +3251,35 @@ $.extend( CZRItemMths , {
                   $(this).remove();
                 }
             });
-      }
+      },
+
+
+
+
+
+
+      // LOADER HELPERS
+      // @return void()
+      // print a loader between the moment the item container is appended, and the item content is fetched from the server
+      printLoader : function() {
+            var item = this;
+            item.container
+                .css({'position' :'relative'})
+                .append( api.CZR_Helpers.css_loader_html ).find('.czr-css-loader').fadeIn( 'fast' );
+
+            // Start the countdown for auto-cleaning
+            clearTimeout( $.data( this, '_czr_loader_active_timer_') );
+            $.data( this, '_czr_loader_active_timer_', setTimeout(function() {
+                  item.cleanLoader();
+            }, 5000 ) );
+      },
+
+      // @return void()
+      cleanLoader : function() {
+            this.container
+                .css({'min-height' : ''})
+                .find('.czr-css-loader').remove();
+      },
 });//$.extend
 })( wp.customize , jQuery, _ );//extends api.Value
 //options:
@@ -3364,7 +3413,7 @@ $.extend( CZRModOptMths , {
                                           name      : 'tab_nav',
                                           actions   : function( args ) {
                                                 //toggleTabVisibility is declared in the module ctor and its "this" is the item or the modOpt
-                                                var tabIdSwitchedTo = $( args.dom_event.currentTarget, args.dom_el ).attr('data-tab-id');
+                                                var tabIdSwitchedTo = $( args.dom_event.currentTarget, args.dom_el ).data('tab-id');
                                                 this.module.toggleTabVisibility.call( this, tabIdSwitchedTo );
                                                 this.trigger( 'tab-switch', { id : tabIdSwitchedTo } );
                                           }
@@ -4782,7 +4831,7 @@ $.extend( CZRModuleMths, {
             setTimeout(
                   function() {
                         preProcessTabs().done( function() {
-                              $('.tabs', inputParent.container ).fadeIn( 450 );
+                              $('.tabs', inputParent.container ).show();
                         });
                   },
                   20//<= introducing a small delay to let jQuery do its preprocessing job
@@ -6032,10 +6081,31 @@ $.extend( CZRBaseModuleControlMths, {
             // });
 
             var fireHeaderButtons = function() {
-                  var $home_button = $('<span/>', { class:'customize-controls-home fas fa-home', html:'<span class="screen-reader-text">Home</span>' } );
-                  $.when( $('#customize-header-actions').append( $home_button ) )
+                  var $header_button;
+
+                  // Deactivated for the moment.
+                  // The + button has been moved in the Nimble top bar
+                  // if ( api.czr_sektions ) {
+                  //       var _title_ = ( window.sektionsLocalizedData && sektionsLocalizedData.i18n && sektionsLocalizedData.i18n['Drag and drop content'] ) ? sektionsLocalizedData.i18n['Drag and drop content'] : '';
+                  //       $header_button = $('<span/>', {
+                  //             class:'customize-controls-home-or-add',
+                  //             html:'<span class="screen-reader-text">Home</span><span class="material-icons" title="' + _title_ +'">add_circle_outline</span>'
+                  //       });
+                  // } else {
+                  //       $header_button = $('<span/>', {
+                  //             class:'customize-controls-home-or-add fas fa-home',
+                  //             html:'<span class="screen-reader-text">Home</span>'
+                  //       });
+                  // }
+
+                  $header_button = $('<span/>', {
+                        class:'customize-controls-home-or-add fas fa-home',
+                        html:'<span class="screen-reader-text">Home</span>'
+                  });
+
+                  $.when( $('#customize-header-actions').append( $header_button ) )
                         .done( function() {
-                              $home_button
+                              $header_button
                                     .keydown( function( event ) {
                                           if ( 9 === event.which ) // tab
                                             return;
@@ -6043,7 +6113,10 @@ $.extend( CZRBaseModuleControlMths, {
                                             this.click();
                                           event.preventDefault();
                                     })
-                                    .on( 'click.customize-controls-home', function() {
+                                    .on( 'click.customize-controls-home-or-add', function() {
+                                          // if ( api.czr_sektions ) {
+                                          //       api.previewer.trigger( 'sek-pick-content', {});
+                                          // }
                                           //event.preventDefault();
                                           //close everything
                                           if ( api.section.has( api.czr_activeSectionId() ) ) {
@@ -6057,7 +6130,35 @@ $.extend( CZRBaseModuleControlMths, {
                                                 _p.expanded( false );
                                           });
                                     });
-                        });
+                              // animate on init
+                              // @use button-see-mee css class declared in core in /wp-admin/css/customize-controls.css
+                              _.delay( function() {
+                                    if ( $header_button.hasClass( 'button-see-me') )
+                                      return;
+                                    var _seeMe = function() {
+                                              return $.Deferred(function(){
+                                                    var dfd = this;
+                                                    $header_button.addClass('button-see-me');
+                                                    _.delay( function() {
+                                                          $header_button.removeClass('button-see-me');
+                                                          dfd.resolve();
+                                                    }, 800 );
+                                              });
+                                        },
+                                        i = 0,
+                                        _seeMeLoop = function() {
+                                              _seeMe().done( function() {
+                                                    i--;
+                                                    if ( i >= 0 ) {
+                                                          _.delay( function() {
+                                                                _seeMeLoop();
+                                                          }, 50 );
+                                                    }
+                                              });
+                                        };
+                                    _seeMeLoop();
+                              }, 2000 );
+                        });// done()
             };
 
             fireHeaderButtons();
