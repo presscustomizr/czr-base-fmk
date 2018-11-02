@@ -166,7 +166,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $post_types = $object_types;
                   }
                   if ( ! $post_types || ! is_array( $post_types ) || empty( $post_types ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
                   $posts = get_posts( array(
@@ -201,7 +201,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $taxonomies = $object_types;
                   }
                   if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
                       'child_of'     => 0,
@@ -364,7 +364,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $post_types = $object_types;
                   }
                   if ( ! $post_types || empty( $post_types ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
                   $query = array(
@@ -383,7 +383,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                   }
 
                   // Query posts.
-                  $get_posts = new WP_Query( $query );
+                  $get_posts = new \WP_Query( $query );
                   // Check if any posts were found.
                   if ( $get_posts->post_count ) {
                       foreach ( $get_posts->posts as $post ) {
@@ -410,7 +410,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $taxonomies = $object_types;
                   }
                   if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
                       'name__like' => $args['s'],
