@@ -324,7 +324,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             remove_filter( 'pre_post_link', array( $this, 'dont_use_fancy_permalinks' ), 999 );
 
             if ( empty( $items ) ) {
-                wp_send_json_error( array( 'message' => __( 'No results found.', 'text_domain_to_be_replaced') ) );
+                wp_send_json_success( array( 'message' => __( 'No results found.', 'text_domain_to_be_replaced') ) );
             } else {
                 wp_send_json_success( array(
                     'items' => apply_filters( 'content_picker_ajax_items', $items, $p, 'ajax_search_available_items' )
