@@ -67,25 +67,25 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                       'isDevMode' => ( defined('WP_DEBUG') && true === WP_DEBUG ) || ( defined('CZR_DEV') && true === CZR_DEV ),
                       'docURL'          => esc_url('docs.presscustomizr.com/'),
                       'i18n' => array(
-                            'edit' => __('Edit', 'text_domain_to_be_replaced'),
-                            'close' => __('Close', 'text_domain_to_be_replaced'),
-                            'notset' => __('Not set', 'text_domain_to_be_replaced'),
-                            'successMessage' => __('Done !', 'text_domain_to_be_replaced'),
+                            'edit' => __('Edit', 'text_doma'),
+                            'close' => __('Close', 'text_doma'),
+                            'notset' => __('Not set', 'text_doma'),
+                            'successMessage' => __('Done !', 'text_doma'),
 
-                            'readDocumentation' => __('Learn more about this in the documentation', 'text_domain_to_be_replaced'),
-                            'Settings' => __('Settings', 'text_domain_to_be_replaced'),
-                            'Options for' => __('Options for', 'text_domain_to_be_replaced'),
+                            'readDocumentation' => __('Learn more about this in the documentation', 'text_doma'),
+                            'Settings' => __('Settings', 'text_doma'),
+                            'Options for' => __('Options for', 'text_doma'),
 
                             // img upload translation
-                            'select_image'        => __( 'Select Image', 'text_domain_to_be_replaced' ),
-                            'change_image'        => __( 'Change Image', 'text_domain_to_be_replaced' ),
-                            'remove_image'        => __( 'Remove', 'text_domain_to_be_replaced' ),
-                            'default_image'       => __( 'Default', 'text_domain_to_be_replaced'  ),
-                            'placeholder_image'   => __( 'No image selected', 'text_domain_to_be_replaced' ),
-                            'frame_title_image'   => __( 'Select Image', 'text_domain_to_be_replaced' ),
-                            'frame_button_image'  => __( 'Choose Image', 'text_domain_to_be_replaced' ),
+                            'select_image'        => __( 'Select Image', 'text_doma' ),
+                            'change_image'        => __( 'Change Image', 'text_doma' ),
+                            'remove_image'        => __( 'Remove', 'text_doma' ),
+                            'default_image'       => __( 'Default', 'text_doma'  ),
+                            'placeholder_image'   => __( 'No image selected', 'text_doma' ),
+                            'frame_title_image'   => __( 'Select Image', 'text_doma' ),
+                            'frame_button_image'  => __( 'Choose Image', 'text_doma' ),
 
-                            'Customizing' => __('Customizing', 'text_domain_to_be_replaced'),
+                            'Customizing' => __('Customizing', 'text_doma'),
                       ),
                       'paramsForDynamicRegistration' => apply_filters( 'czr_fmk_dynamic_setting_js_params', array() )
                   )

@@ -286,8 +286,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                     case 'tiny_mce_editor' :
                         ?>
                           <# //console.log( 'IN php::ac_get_default_input_tmpl() => data sent to the tmpl => ', data ); #>
-                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_domain_to_be_replaced' ); ?></button>&nbsp;
-                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Hide editor', 'text_domain_to_be_replaced' ); ?></button>
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_doma' ); ?></button>&nbsp;
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Hide editor', 'text_doma' ); ?></button>
                           <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value="{{ data.value }}"/>
                         <?php
                     break;

@@ -69,6 +69,13 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             return array_key_exists( $module_type , $registered ) ? $registered[ $module_type ] : false;
         }
 
+        // @return bool
+        function czr_is_module_registered( $module_type = '' ) {
+            $registered = $this->registered_modules;
+            if ( empty( $module_type ) || ! is_array( $registered ) || empty( $registered ) )
+              return;
+            return array_key_exists( $module_type , $registered );
+        }
 
 
         ////////////////////////////////////////////////////////////////
@@ -228,15 +235,15 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             // With tabs
             // 'tabs' => array(
               // array(
-              //     'title' => __('Spacing', 'text_domain_to_be_replaced'),
+              //     'title' => __('Spacing', 'text_doma'),
               //     'inputs' => array(
               //         'padding' => array(
               //             'input_type'  => 'number',
-              //             'title'       => __('Padding', 'text_domain_to_be_replaced')
+              //             'title'       => __('Padding', 'text_doma')
               //         ),
               //         'margin' => array(
               //             'input_type'  => 'number',
-              //             'title'       => __('Margin', 'text_domain_to_be_replaced')
+              //             'title'       => __('Margin', 'text_doma')
               //         )
               //     )
               // ),
@@ -246,11 +253,11 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
               // Without tabs :
               //  'padding' => array(
               //       'input_type'  => 'number',
-              //       'title'       => __('Padding', 'text_domain_to_be_replaced')
+              //       'title'       => __('Padding', 'text_doma')
               //  ),
               //   'margin' => array(
               //      'input_type'  => 'number',
-              //      'title'       => __('Margin', 'text_domain_to_be_replaced')
+              //      'title'       => __('Margin', 'text_doma')
               //  )
             if ( array_key_exists( 'tabs', $tmpl_map ) ) {
                 ob_start();
