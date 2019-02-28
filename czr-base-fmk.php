@@ -235,25 +235,25 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                       'isDevMode' => ( defined('WP_DEBUG') && true === WP_DEBUG ) || ( defined('CZR_DEV') && true === CZR_DEV ),
                       'docURL'          => esc_url('docs.presscustomizr.com/'),
                       'i18n' => array(
-                            'edit' => __('Edit', 'text_domain_to_be_replaced'),
-                            'close' => __('Close', 'text_domain_to_be_replaced'),
-                            'notset' => __('Not set', 'text_domain_to_be_replaced'),
-                            'successMessage' => __('Done !', 'text_domain_to_be_replaced'),
+                            'edit' => __('Edit', 'text_doma'),
+                            'close' => __('Close', 'text_doma'),
+                            'notset' => __('Not set', 'text_doma'),
+                            'successMessage' => __('Done !', 'text_doma'),
 
-                            'readDocumentation' => __('Learn more about this in the documentation', 'text_domain_to_be_replaced'),
-                            'Settings' => __('Settings', 'text_domain_to_be_replaced'),
-                            'Options for' => __('Options for', 'text_domain_to_be_replaced'),
+                            'readDocumentation' => __('Learn more about this in the documentation', 'text_doma'),
+                            'Settings' => __('Settings', 'text_doma'),
+                            'Options for' => __('Options for', 'text_doma'),
 
                             // img upload translation
-                            'select_image'        => __( 'Select Image', 'text_domain_to_be_replaced' ),
-                            'change_image'        => __( 'Change Image', 'text_domain_to_be_replaced' ),
-                            'remove_image'        => __( 'Remove', 'text_domain_to_be_replaced' ),
-                            'default_image'       => __( 'Default', 'text_domain_to_be_replaced'  ),
-                            'placeholder_image'   => __( 'No image selected', 'text_domain_to_be_replaced' ),
-                            'frame_title_image'   => __( 'Select Image', 'text_domain_to_be_replaced' ),
-                            'frame_button_image'  => __( 'Choose Image', 'text_domain_to_be_replaced' ),
+                            'select_image'        => __( 'Select Image', 'text_doma' ),
+                            'change_image'        => __( 'Change Image', 'text_doma' ),
+                            'remove_image'        => __( 'Remove', 'text_doma' ),
+                            'default_image'       => __( 'Default', 'text_doma'  ),
+                            'placeholder_image'   => __( 'No image selected', 'text_doma' ),
+                            'frame_title_image'   => __( 'Select Image', 'text_doma' ),
+                            'frame_button_image'  => __( 'Choose Image', 'text_doma' ),
 
-                            'Customizing' => __('Customizing', 'text_domain_to_be_replaced'),
+                            'Customizing' => __('Customizing', 'text_doma'),
                       ),
                       'paramsForDynamicRegistration' => apply_filters( 'czr_fmk_dynamic_setting_js_params', array() )
                   )
@@ -277,8 +277,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
             //select2 stylesheet
             //overriden by some specific style in czr-control-base.css
             wp_enqueue_style(
-                'select2-css',
-                 sprintf('%1$s/assets/css/lib/select2.min.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
+                'czr-select2-css',
+                 sprintf('%1$s/assets/css/lib/czrSelect2.min.css', NIMBLE_FMK_BASE_URL, ( defined('WP_DEBUG') && true === WP_DEBUG ) ? '' : '.min'),
                 array( 'customize-controls' ),
                 ( defined('WP_DEBUG') && true === WP_DEBUG ) ? time() : NIMBLE_FMK_BASE_VERSION,
                 $media = 'all'
@@ -431,12 +431,12 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
             switch ( $requested_tmpl ) {
                 case 'crud-module-part' :
                     ?>
-                      <button class="<?php echo $css_attr['open_pre_add_btn']; ?>"><?php _e('Add New', 'text_domain_to_be_replaced'); ?> <span class="fas fa-plus-square"></span></button>
+                      <button class="<?php echo $css_attr['open_pre_add_btn']; ?>"><?php _e('Add New', 'text_doma'); ?> <span class="fas fa-plus-square"></span></button>
                       <div class="<?php echo $css_attr['pre_add_wrapper']; ?>">
                         <div class="<?php echo $css_attr['pre_add_success']; ?>"><p></p></div>
                         <div class="<?php echo $css_attr['pre_add_item_content']; ?>">
 
-                          <span class="<?php echo $css_attr['cancel_pre_add_btn']; ?> button"><?php _e('Cancel', 'text_domain_to_be_replaced'); ?></span> <span class="<?php echo $css_attr['add_new_btn']; ?> button"><?php _e('Add it', 'text_domain_to_be_replaced'); ?></span>
+                          <span class="<?php echo $css_attr['cancel_pre_add_btn']; ?> button"><?php _e('Cancel', 'text_doma'); ?></span> <span class="<?php echo $css_attr['add_new_btn']; ?> button"><?php _e('Add it', 'text_doma'); ?></span>
                         </div>
                       </div>
                     <?php
@@ -449,7 +449,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
                         <# } else { #>
                           <div class="<?php echo $css_attr['item_title']; ?>"><h4>{{ data.title }}</h4></div>
                         <# } #>
-                        <div class="<?php echo $css_attr['item_btns']; ?>"><a title="<?php _e('Edit', 'text_domain_to_be_replaced'); ?>" href="javascript:void(0);" class="fas fa-pencil-alt <?php echo $css_attr['edit_view_btn']; ?>"></a>&nbsp;<a title="<?php _e('Remove', 'text_domain_to_be_replaced'); ?>" href="javascript:void(0);" class="fas fa-trash <?php echo $css_attr['display_alert_btn']; ?>"></a></div>
+                        <div class="<?php echo $css_attr['item_btns']; ?>"><a title="<?php _e('Edit', 'text_doma'); ?>" href="javascript:void(0);" class="fas fa-pencil-alt <?php echo $css_attr['edit_view_btn']; ?>"></a>&nbsp;<a title="<?php _e('Remove', 'text_doma'); ?>" href="javascript:void(0);" class="fas fa-trash <?php echo $css_attr['display_alert_btn']; ?>"></a></div>
                         <div class="<?php echo $css_attr['remove_alert_wrapper']; ?>"></div>
                       </div>
                     <?php
@@ -457,8 +457,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
 
                 case 'rud-item-alert-part' :
                     ?>
-                      <p class="czr-item-removal-title"><?php _e('Are you sure you want to remove : <strong>{{ data.title }} ?</strong>', 'text_domain_to_be_replaced'); ?></p>
-                      <span class="<?php echo $css_attr['remove_view_btn']; ?> button"><?php _e('Yes', 'text_domain_to_be_replaced'); ?></span> <span class="<?php echo $css_attr['cancel_alert_btn']; ?> button"><?php _e('No', 'text_domain_to_be_replaced'); ?></span>
+                      <p class="czr-item-removal-title"><?php _e('Are you sure you want to remove : <strong>{{ data.title }} ?</strong>', 'text_doma'); ?></p>
+                      <span class="<?php echo $css_attr['remove_view_btn']; ?> button"><?php _e('Yes', 'text_doma'); ?></span> <span class="<?php echo $css_attr['cancel_alert_btn']; ?> button"><?php _e('No', 'text_doma'); ?></span>
                     <?php
                 break;
 
@@ -543,6 +543,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'title'        => '',
                 'default'  => '',
 
+                'notice_before_title' => '',
                 'notice_before' => '',
                 'notice_after' => '',
                 'placeholder' => '',
@@ -643,14 +644,20 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 $input_type,
                 ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : ''
             );
+            ?>
+            <?php if ( ! empty( $input_data['notice_before_title'] ) ) : ?>
+                <span class="czr-notice"><?php echo $input_data['notice_before_title']; ?></span><br/>
+            <?php endif; ?>
+
+            <?php
             // no need to print a title for an hidden input
             if ( $input_type !== 'hidden' ) {
                 printf( '<div class="customize-control-title %1$s">%2$s</div>', ! empty( $input_data['title_width'] ) ? $input_data['title_width'] : '', $input_data['title'] );
             }
             ?>
-              <?php if ( ! empty( $input_data['notice_before'] ) ) : ?>
-                  <span class="czr-notice"><?php echo $input_data['notice_before']; ?></span>
-              <?php endif; ?>
+            <?php if ( ! empty( $input_data['notice_before'] ) ) : ?>
+                <span class="czr-notice"><?php echo $input_data['notice_before']; ?></span>
+            <?php endif; ?>
 
             <?php printf( '<div class="czr-input %1$s">', ! empty( $input_data['input_width'] ) ? $input_data['input_width'] : '' ); ?>
 
@@ -806,8 +813,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                     case 'tiny_mce_editor' :
                         ?>
                           <# //console.log( 'IN php::ac_get_default_input_tmpl() => data sent to the tmpl => ', data ); #>
-                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_domain_to_be_replaced' ); ?></button>&nbsp;
-                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Hide editor', 'text_domain_to_be_replaced' ); ?></button>
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="open-tinymce-editor"><?php _e('Edit', 'text_doma' ); ?></button>&nbsp;
+                          <button type="button" class="button text_editor-button" data-czr-control-id="{{ data.control_id }}" data-czr-input-id="<?php echo $input_id; ?>" data-czr-action="close-tinymce-editor"><?php _e('Hide editor', 'text_doma' ); ?></button>
                           <input data-czrtype="<?php echo $input_id; ?>" type="hidden" value="{{ data.value }}"/>
                         <?php
                     break;
@@ -1271,6 +1278,13 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             return array_key_exists( $module_type , $registered ) ? $registered[ $module_type ] : false;
         }
 
+        // @return bool
+        function czr_is_module_registered( $module_type = '' ) {
+            $registered = $this->registered_modules;
+            if ( empty( $module_type ) || ! is_array( $registered ) || empty( $registered ) )
+              return;
+            return array_key_exists( $module_type , $registered );
+        }
 
 
         ////////////////////////////////////////////////////////////////
@@ -1430,15 +1444,15 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             // With tabs
             // 'tabs' => array(
               // array(
-              //     'title' => __('Spacing', 'text_domain_to_be_replaced'),
+              //     'title' => __('Spacing', 'text_doma'),
               //     'inputs' => array(
               //         'padding' => array(
               //             'input_type'  => 'number',
-              //             'title'       => __('Padding', 'text_domain_to_be_replaced')
+              //             'title'       => __('Padding', 'text_doma')
               //         ),
               //         'margin' => array(
               //             'input_type'  => 'number',
-              //             'title'       => __('Margin', 'text_domain_to_be_replaced')
+              //             'title'       => __('Margin', 'text_doma')
               //         )
               //     )
               // ),
@@ -1448,11 +1462,11 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
               // Without tabs :
               //  'padding' => array(
               //       'input_type'  => 'number',
-              //       'title'       => __('Padding', 'text_domain_to_be_replaced')
+              //       'title'       => __('Padding', 'text_doma')
               //  ),
               //   'margin' => array(
               //      'input_type'  => 'number',
-              //      'title'       => __('Margin', 'text_domain_to_be_replaced')
+              //      'title'       => __('Margin', 'text_doma')
               //  )
             if ( array_key_exists( 'tabs', $tmpl_map ) ) {
                 ob_start();
@@ -1521,7 +1535,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
               return array_merge(
                   array(
                       array(
-                         'title'      => sprintf( '<span style="font-weight:bold">%1$s</span>', __('Set a custom url', 'text_domain_to_be_replaced') ),
+                         'title'      => sprintf( '<span style="font-weight:bold">%1$s</span>', __('Set a custom url', 'text_doma') ),
                          'type'       => '',
                          'type_label' => '',
                          'object'     => '',
@@ -1661,7 +1675,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $post_types = $object_types;
                   }
                   if ( ! $post_types || ! is_array( $post_types ) || empty( $post_types ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
                   $posts = get_posts( array(
@@ -1676,7 +1690,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                         $post_title = $post->post_title;
                         if ( '' === $post_title ) {
                           // translators: %d: ID of a post
-                          $post_title = sprintf( __( '#%d (no title)', 'text_domain_to_be_replaced' ), $post->ID );
+                          $post_title = sprintf( __( '#%d (no title)', 'text_doma' ), $post->ID );
                         }
                         $items[] = array(
                             'title'      => html_entity_decode( $post_title, ENT_QUOTES, get_bloginfo( 'charset' ) ),
@@ -1696,7 +1710,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $taxonomies = $object_types;
                   }
                   if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
                       'child_of'     => 0,
@@ -1819,7 +1833,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             remove_filter( 'pre_post_link', array( $this, 'dont_use_fancy_permalinks' ), 999 );
 
             if ( empty( $items ) ) {
-                wp_send_json_error( array( 'message' => __( 'No results found.', 'text_domain_to_be_replaced') ) );
+                wp_send_json_success( array( 'message' => __( 'No results found.', 'text_doma') ) );
             } else {
                 wp_send_json_success( array(
                     'items' => apply_filters( 'content_picker_ajax_items', $items, $p, 'ajax_search_available_items' )
@@ -1859,7 +1873,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $post_types = $object_types;
                   }
                   if ( ! $post_types || empty( $post_types ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
                   $query = array(
@@ -1878,14 +1892,14 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                   }
 
                   // Query posts.
-                  $get_posts = new WP_Query( $query );
+                  $get_posts = new \WP_Query( $query );
                   // Check if any posts were found.
                   if ( $get_posts->post_count ) {
                       foreach ( $get_posts->posts as $post ) {
                             $post_title = $post->post_title;
                             if ( '' === $post_title ) {
                               /* translators: %d: ID of a post */
-                              $post_title = sprintf( __( '#%d (no title)', 'text_domain_to_be_replaced' ), $post->ID );
+                              $post_title = sprintf( __( '#%d (no title)', 'text_doma' ), $post->ID );
                             }
                             $items[] = array(
                                 'title'      => html_entity_decode( $post_title, ENT_QUOTES, get_bloginfo( 'charset' ) ),
@@ -1905,7 +1919,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                       $taxonomies = $object_types;
                   }
                   if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
-                      return new WP_Error( 'czr_contents_invalid_post_type' );
+                      return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
                       'name__like' => $args['s'],
