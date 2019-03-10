@@ -264,8 +264,10 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                      *  TEXTAREA
                     /* ------------------------------------------------------------------------- */
                     case 'textarea' :
+                      // Added an id attribute for https://github.com/presscustomizr/nimble-builder/issues/403
+                      // needed to instantiate wp.editor.initialize(...)
                       ?>
-                        <textarea data-czrtype="<?php echo $input_id; ?>" class="width-100" name="textarea" rows="10" cols="">{{ data.value }}</textarea>
+                        <textarea id="textarea-{{ data.id }}" data-czrtype="<?php echo $input_id; ?>" class="width-100" name="textarea" rows="10" cols="">{{ data.value }}</textarea>
                       <?php
                     break;
 
