@@ -195,9 +195,17 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                      *  SELECT
                     /* ------------------------------------------------------------------------- */
                     case 'czr_layouts'://<= specific to the hueman theme
-                    case 'select':
+                    case 'select'://<= used in the customizr and hueman theme
+                    case 'simpleselect'://<=used in Nimble Builder
                       ?>
                         <select data-czrtype="<?php echo $input_id; ?>"></select>
+                      <?php
+                    break;
+                    // multiselect with select2() js library
+                    case 'multiselect':
+                    case 'category_picker':
+                      ?>
+                        <select multiple="multiple" data-czrtype="<?php echo $input_id; ?>"></select>
                       <?php
                     break;
 
