@@ -799,12 +799,25 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                       <?php
                     break;
 
+                    // DEPRECATED since april 2nd 2019
                     case 'gutencheck' :
                         ?>
                           <#
                             var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
                           #>
                           <span class="czr-toggle-check"><input class="czr-toggle-check__input" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }}><span class="czr-toggle-check__track"></span><span class="czr-toggle-check__thumb"></span></span>
+                        <?php
+                    break;
+
+                    case 'nimblecheck' :
+                        ?>
+                          <#
+                            var _checked = ( false != data['<?php echo $input_id; ?>'] ) ? "checked=checked" : '';
+                          #>
+                          <div class="nimblecheck-wrap">
+                            <input id="nimblecheck-<?php echo $input_id; ?>" data-czrtype="<?php echo $input_id; ?>" type="checkbox" {{ _checked }} class="nimblecheck-input">
+                            <label for="nimblecheck-<?php echo $input_id; ?>" class="nimblecheck-label">Switch</label>
+                          </div>
                         <?php
                     break;
 
