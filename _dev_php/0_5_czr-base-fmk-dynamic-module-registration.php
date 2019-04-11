@@ -221,6 +221,9 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             }
 
             $module_params = $registered_modules[ $module_type ];
+            // Store the params now, so we can access them when rendering the input templates
+            $this->current_module_params_when_ajaxing = $module_params;
+
             $tmpl_params = $module_params[ 'tmpl' ];
             // Enqueue the list of registered scripts
             if ( empty( $tmpl_params ) ) {

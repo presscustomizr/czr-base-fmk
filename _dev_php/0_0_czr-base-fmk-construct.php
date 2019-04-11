@@ -27,6 +27,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
 
         public $czr_css_attr = array();
 
+        public $current_module_params_when_ajaxing;// store the params when ajaxing and allows us to access the currently requested module params at any point of the ajax action
+
         public static function czr_fmk_get_instance( $params ) {
             if ( ! isset( self::$instance ) && ! ( self::$instance instanceof CZR_Fmk_Base ) ) {
               self::$instance = new CZR_Fmk_Base( $params );

@@ -59,7 +59,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
                 'scope' => 'local',// <= used when resetting the sections
                 // introduced for https://github.com/presscustomizr/nimble-builder/issues/403
-                'editor_params' => array()
+                'editor_params' => array(),
+
+                // introduced for https://github.com/presscustomizr/nimble-builder/issues/431
+                'section_collection' => array(),
+                'section_type' => 'content'
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
                 if ( ! is_string( $input_id ) || empty( $input_id ) ) {
