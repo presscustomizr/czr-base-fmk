@@ -46,7 +46,38 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
             }
             $tmpl = $_POST['tmpl'];
             $module_type = $_POST['module_type'];
+
+            ///////////////////////////////////////////////////////////////////////
+            // @param $tmpl = 'item-inputs'
+            //
+            // @param $_POST = {
+            // [tmpl] => item-inputs
+            // [module_type] => czr_heading_child
+            // [module_id] => __nimble__51b2f35191b3__main_settings_czr_module
+            // [cache] => true
+            // [nonce] => b4b0aea848
+            // [control_id] => __nimble__51b2f35191b3__main_settings
+            // [item_model] => Array
+            //     (
+            //         [id] => czr_heading_child_0
+            //         [title] =>
+            //         [heading_text] => This is a heading.
+            //         [heading_tag] => h1
+            //         [h_alignment_css] => Array
+            //             (
+            //                 [desktop] => center
+            //             )
+
+            //         [heading_title] =>
+            //         [link-to] =>
+            //         [link-custom-url] =>
+            //         [link-target] =>
+            //     )
+
+            // [action] => ac_get_template
+            // }
             $html = apply_filters( "ac_set_ajax_czr_tmpl___{$module_type}", '', $tmpl, $_POST );
+            ///////////////////////////////////////////////////////////////////////////
 
             if ( empty( $html ) ) {
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => module ' . $module_type . ' => template empty for requested tmpl : ' . $tmpl );
