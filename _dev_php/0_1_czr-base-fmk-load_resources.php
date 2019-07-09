@@ -16,6 +16,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
 
             // adds specific js templates for the czr_module control
             add_action( 'customize_controls_print_footer_scripts', array( $this, 'ac_print_module_control_templates' ) , 1 );
+
+            add_action( 'customize_controls_print_footer_scripts', array( $this, 'ac_print_img_uploader_template' ) , 1 );
         }
 
 
@@ -182,6 +184,62 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                 </label>
               </script>
             <?php
+        }
+
+
+        // this template is used in setupImageUploaderSaveAsId and setupImageUploaderSaveAsUrl
+        // @see js CZRInputMths
+        function ac_print_img_uploader_template() {
+          ?>
+            <script type="text/html" id="tmpl-czr-img-uploader">
+              <?php // case when a regular attachement object is provided, fetched from an id with wp.media.attachment( id ) ?>
+                <# if ( ( data.attachment && data.attachment.id ) ) { #>
+                  <div class="attachment-media-view attachment-media-view-{{ data.attachment.type }} {{ data.attachment.orientation }}">
+                    <div class="thumbnail thumbnail-{{ data.attachment.type }}">
+                      <# if ( 'image' === data.attachment.type && data.attachment.sizes && data.attachment.sizes.medium ) { #>
+                        <img class="attachment-thumb" src="{{ data.attachment.sizes.medium.url }}" draggable="false" alt="" />
+                      <# } else if ( 'image' === data.attachment.type && data.attachment.sizes && data.attachment.sizes.full ) { #>
+                        <img class="attachment-thumb" src="{{ data.attachment.sizes.full.url }}" draggable="false" alt="" />
+                      <# } #>
+                    </div>
+                    <div class="actions">
+                      <# if ( data.canUpload ) { #>
+                      <button type="button" class="button remove-button">{{ data.button_labels.remove }}</button>
+                      <button type="button" class="button upload-button control-focus" id="{{ data.settings['default'] }}-button">{{ data.button_labels.change }}</button>
+                      <div style="clear:both"></div>
+                      <# } #>
+                    </div>
+                  </div>
+                <?php // case when an url is provided ?>
+                <# } else if ( ! _.isEmpty( data.fromUrl ) ) { #>
+                  <div class="attachment-media-view">
+                    <div class="thumbnail thumbnail-thumb">
+                        <img class="attachment-thumb" src="{{ data.fromUrl }}" draggable="false" alt="" />
+                    </div>
+                    <div class="actions">
+                      <# if ( data.canUpload ) { #>
+                      <button type="button" class="button remove-button">{{ data.button_labels.remove }}</button>
+                      <button type="button" class="button upload-button control-focus" id="{{ data.settings['default'] }}-button">{{ data.button_labels.change }}</button>
+                      <div style="clear:both"></div>
+                      <# } #>
+                    </div>
+                  </div>
+                <?php // case when neither attachement or url are provided => placeholder ?>
+                <# } else { #>
+                  <div class="attachment-media-view">
+                    <div class="placeholder">
+                      {{ data.button_labels.placeholder }}
+                    </div>
+                    <div class="actions">
+                      <# if ( data.canUpload ) { #>
+                      <button type="button" class="button upload-button" id="{{ data.settings['default'] }}-button">{{ data.button_labels.select }}</button>
+                      <# } #>
+                      <div style="clear:both"></div>
+                    </div>
+                  </div>
+                <# } #>
+            </script>
+          <?php
         }
     }//class
 endif;
