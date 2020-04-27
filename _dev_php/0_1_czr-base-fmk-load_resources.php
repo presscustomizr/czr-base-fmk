@@ -1,7 +1,7 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
+if ( !class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
     class CZR_Fmk_Base_Load_Resources extends CZR_Fmk_Base_Construct {
 
         // fired in the constructor
@@ -211,7 +211,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                     </div>
                   </div>
                 <?php // case when an url is provided ?>
-                <# } else if ( ! _.isEmpty( data.fromUrl ) ) { #>
+                <# } else if ( !_.isEmpty( data.fromUrl ) ) { #>
                   <div class="attachment-media-view">
                     <div class="thumbnail thumbnail-thumb">
                         <img class="attachment-thumb" src="{{ data.fromUrl }}" draggable="false" alt="" />

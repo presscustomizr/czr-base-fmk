@@ -1,7 +1,7 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
+if ( !class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
     class CZR_Fmk_Dyn_Module_Registration extends CZR_Fmk_Dyn_Setting_Registration {
 
         //fired in the constructor
@@ -33,11 +33,11 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             // error_log( print_r( $module_params, true ) );
             // error_log( '</czr_pre_register_dynamic_module>' );
 
-            if ( ! is_array( $module_params ) || empty( $module_params ) ) {
+            if ( !is_array( $module_params ) || empty( $module_params ) ) {
                 error_log( 'czr_pre_register_dynamic_module => empty $module_params submitted' );
                 return;
             }
-            if ( ! array_key_exists( 'module_type', $module_params ) || empty( $module_params['module_type'] ) ) {
+            if ( !array_key_exists( 'module_type', $module_params ) || empty( $module_params['module_type'] ) ) {
                 error_log( 'czr_pre_register_dynamic_module => missing module_type' );
                 return;
             }
@@ -64,7 +64,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         // @return boolean or array of module params
         function czr_get_registered_dynamic_module( $module_type = '' ) {
             $registered = $this->registered_modules;
-            if ( empty( $module_type ) || ! is_array( $registered ) || empty( $registered ) )
+            if ( empty( $module_type ) || !is_array( $registered ) || empty( $registered ) )
               return;
             return array_key_exists( $module_type , $registered ) ? $registered[ $module_type ] : false;
         }
@@ -72,7 +72,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         // @return bool
         function czr_is_module_registered( $module_type = '' ) {
             $registered = $this->registered_modules;
-            if ( empty( $module_type ) || ! is_array( $registered ) || empty( $registered ) )
+            if ( empty( $module_type ) || !is_array( $registered ) || empty( $registered ) )
               return;
             return array_key_exists( $module_type , $registered );
         }
@@ -109,7 +109,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         //     )
         // ),
         function czr_register_dynamic_modules_customizer_control_assets() {
-            if ( ! is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
+            if ( !is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
               return;
 
             $wp_scripts = wp_scripts();
@@ -120,9 +120,9 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
                 //error_log( print_r( $params, true ) );
                 $control_js_params = $params[ 'customizer_assets' ][ 'control_js' ];
                 // Enqueue the list of registered scripts
-                if ( ! empty( $control_js_params ) ) {
+                if ( !empty( $control_js_params ) ) {
                     foreach ( $control_js_params as $handle => $script_args ) {
-                        if ( ! isset( $wp_scripts->registered[$handle] ) ) {
+                        if ( !isset( $wp_scripts->registered[$handle] ) ) {
                             wp_enqueue_script(
                                 $handle,
                                 array_key_exists( 'src', $script_args ) ? $script_args['src'] : null,
@@ -151,7 +151,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
                 if ( array_key_exists( 'localized_control_js', $params[ 'customizer_assets' ] ) ) {
                     $localized_control_js_params = is_array( $params[ 'customizer_assets' ][ 'localized_control_js' ] ) ? $params[ 'customizer_assets' ][ 'localized_control_js' ] : array();
 
-                    if ( is_array( $localized_control_js_params ) && ! empty( $localized_control_js_params ) ) {
+                    if ( is_array( $localized_control_js_params ) && !empty( $localized_control_js_params ) ) {
                         wp_localize_script(
                             array_key_exists( 'deps', $localized_control_js_params ) ? $localized_control_js_params['deps'] : '',
                             array_key_exists( 'global_var_name', $localized_control_js_params ) ? $localized_control_js_params['global_var_name'] : '',
@@ -168,12 +168,12 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
         // AJAX TEMPLATE FILTERS
         // hook : init
         function czr_schedule_ajax_tmpl() {
-            if ( ! is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
+            if ( !is_array( $this->registered_modules ) || empty( $this->registered_modules ) )
               return;
 
             foreach ( $this->registered_modules as $module_type => $params ) {
                 $params = wp_parse_args( $params, $this -> default_dynamic_module_params );
-                if ( ! empty( $params['tmpl'] ) ) {
+                if ( !empty( $params['tmpl'] ) ) {
                     $module_type = $params['module_type'];
                     // filter declared with $html = apply_filters( "ac_set_ajax_czr_tmpl___{$module_type}", '', $tmpl, $_POST );
                     add_filter( "ac_set_ajax_czr_tmpl___{$module_type}", array( $this, 'ac_get_ajax_module_tmpl'), 10, 3 );
@@ -203,20 +203,20 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Module_Registration' ) ) :
             // error_log( print_r( $posted_params, true ) );
             // error_log( '</GET AJAX MODULE TMPL>' );
             // the module type is sent in the $posted_params
-            if ( ! is_array( $posted_params ) || empty( $posted_params ) ) {
+            if ( !is_array( $posted_params ) || empty( $posted_params ) ) {
                 wp_send_json_error( 'ac_get_ajax_module_tmpl => empty posted_params' );
             }
-            if ( ! array_key_exists( 'module_type', $posted_params  ) || empty( $posted_params['module_type'] ) ) {
+            if ( !array_key_exists( 'module_type', $posted_params  ) || empty( $posted_params['module_type'] ) ) {
                 wp_send_json_error( 'ac_get_ajax_module_tmpl => missing module_type' );
             }
-            // if ( ! array_key_exists( 'control_id', $posted_params  ) || empty( $posted_params['control_id'] ) ) {
+            // if ( !array_key_exists( 'control_id', $posted_params  ) || empty( $posted_params['control_id'] ) ) {
             //    wp_send_json_error( 'ac_get_ajax_module_tmpl => missing control_id' );
             // }
 
             // find the requested module_id in the list of registered modules
             $registered_modules = $this->registered_modules;
             $module_type = $posted_params['module_type'];
-            if ( ! array_key_exists( $module_type, $registered_modules  ) || empty( $registered_modules[ $module_type ] ) ) {
+            if ( !array_key_exists( $module_type, $registered_modules  ) || empty( $registered_modules[ $module_type ] ) ) {
                 return;
             }
 

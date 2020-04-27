@@ -15,7 +15,7 @@ $czr_base_fmk_namespace = __NAMESPACE__ . '\\';
 do_action( 'nimble_base_fmk_loaded' );
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
+if ( !class_exists( 'CZR_Fmk_Base_Construct' ) ) :
     class CZR_Fmk_Base_Construct {
         static $instance;
 
@@ -30,7 +30,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
         public $current_module_params_when_ajaxing;// store the params when ajaxing and allows us to access the currently requested module params at any point of the ajax action
 
         public static function czr_fmk_get_instance( $params ) {
-            if ( ! isset( self::$instance ) && ! ( self::$instance instanceof CZR_Fmk_Base ) ) {
+            if ( !isset( self::$instance ) && !( self::$instance instanceof CZR_Fmk_Base ) ) {
               self::$instance = new CZR_Fmk_Base( $params );
             }
             return self::$instance;
@@ -40,7 +40,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
         //  'base_url' => '' <= path to root class folder
         //)
         function __construct( $params = array() ) {
-            if ( ! is_array( $params ) || empty( $params ) ) {
+            if ( !is_array( $params ) || empty( $params ) ) {
                 error_log( 'CZR_Fmk_Base => constructor => missing params');
                 return;
             }
@@ -50,8 +50,8 @@ if ( ! class_exists( 'CZR_Fmk_Base_Construct' ) ) :
             }
 
             // DEFINITIONS
-            if ( ! defined( 'NIMBLE_FMK_BASE_URL' ) ) { define( 'NIMBLE_FMK_BASE_URL' , $params['base_url'] ); }
-            if ( ! defined( 'NIMBLE_FMK_BASE_VERSION' ) ) { define( 'NIMBLE_FMK_BASE_VERSION' , isset( $params['version'] ) ? $params['version'] : '1.0.0' ); }
+            if ( !defined( 'NIMBLE_FMK_BASE_URL' ) ) { define( 'NIMBLE_FMK_BASE_URL' , $params['base_url'] ); }
+            if ( !defined( 'NIMBLE_FMK_BASE_VERSION' ) ) { define( 'NIMBLE_FMK_BASE_VERSION' , isset( $params['version'] ) ? $params['version'] : '1.0.0' ); }
 
             // Cache the css attr used in the tmpl builder and in the localized params
             $this -> czr_css_attr = $this -> czr_fmk_get_customizer_controls_css_attr();

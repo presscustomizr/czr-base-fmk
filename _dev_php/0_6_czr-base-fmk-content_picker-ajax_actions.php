@@ -5,7 +5,7 @@
 *
 */
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
+if ( !class_exists( 'CZR_Fmk_Base' ) ) :
     class CZR_Fmk_Base extends CZR_Fmk_Dyn_Module_Registration {
 
       //fired in the constructor
@@ -57,21 +57,21 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
        */
       public function ajax_load_available_items() {
             $action = 'save-customize_' . get_stylesheet();
-            if ( ! check_ajax_referer( $action, 'nonce', false ) ) {
+            if ( !check_ajax_referer( $action, 'nonce', false ) ) {
                  wp_send_json_error( array(
                   'code' => 'invalid_nonce',
                   'message' => __( 'ajax_load_available_items => Security check failed.' ),
                 ) );
             }
 
-            if ( ! current_user_can( 'edit_theme_options' ) ) {
+            if ( !current_user_can( 'edit_theme_options' ) ) {
                 wp_send_json_error('ajax_load_available_items => user_cant_edit_theme_options');
             }
-            if ( ! isset( $_POST['wp_object_types'] ) || empty( $_POST['wp_object_types'] ) ) {
+            if ( !isset( $_POST['wp_object_types'] ) || empty( $_POST['wp_object_types'] ) ) {
                 wp_send_json_error( 'czr_ajax_content_picker_missing_type_or_object_parameter' );
             }
 
-            if ( ! isset( $_POST['page'] ) ) {
+            if ( !isset( $_POST['page'] ) ) {
                 wp_send_json_error( 'czr_ajax_content_picker_missing_pagination_param' );
             }
 
@@ -92,7 +92,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             //      post : [ 'page', 'cpt1', ...]
             //      taxonomy : '_none_'//<= don't load or search taxonomies
             //)
-            if ( ! is_array( $wp_object_types ) || empty( $wp_object_types ) ) {
+            if ( !is_array( $wp_object_types ) || empty( $wp_object_types ) ) {
               wp_send_json_error( 'czr_ajax_content_picker_missing_object_types' );
             }
             $page = empty( $_POST['page'] ) ? 0 : absint( $_POST['page'] );
@@ -160,12 +160,12 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             $items = array();
             if ( 'post' === $type ) {
                   //What are the post types we need to fetch ?
-                  if ( '_all_' == $object_types || ! is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
+                  if ( '_all_' == $object_types || !is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
                       $post_types = get_post_types( array( 'public' => true ) );
                   } else {
                       $post_types = $object_types;
                   }
-                  if ( ! $post_types || ! is_array( $post_types ) || empty( $post_types ) ) {
+                  if ( !$post_types || !is_array( $post_types ) || empty( $post_types ) ) {
                       return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
@@ -195,12 +195,12 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
 
             } elseif ( 'taxonomy' === $type ) {
                   //What are the taxonomy types we need to fetch ?
-                  if ( '_all_' == $object_types || ! is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
+                  if ( '_all_' == $object_types || !is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
                       $taxonomies = get_taxonomies( array( 'show_in_nav_menus' => true ), 'names' );
                   } else {
                       $taxonomies = $object_types;
                   }
-                  if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
+                  if ( !$taxonomies || !is_array( $taxonomies ) || empty( $taxonomies ) ) {
                       return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
@@ -257,17 +257,17 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
        */
       public function ajax_search_available_items() {
             $action = 'save-customize_' . get_stylesheet();
-            if ( ! check_ajax_referer( $action, 'nonce', false ) ) {
+            if ( !check_ajax_referer( $action, 'nonce', false ) ) {
                 wp_send_json_error( array(
                     'code' => 'invalid_nonce',
                     'message' => __( 'ajax_load_available_items => Security check failed.' ),
                 ) );
             }
 
-            if ( ! current_user_can( 'edit_theme_options' ) ) {
+            if ( !current_user_can( 'edit_theme_options' ) ) {
                 wp_send_json_error('ajax_load_available_items => user_cant_edit_theme_options');
             }
-            if ( ! isset( $_POST['wp_object_types'] ) || empty( $_POST['wp_object_types'] ) ) {
+            if ( !isset( $_POST['wp_object_types'] ) || empty( $_POST['wp_object_types'] ) ) {
                 wp_send_json_error( 'czr_ajax_content_picker_missing_type_or_object_parameter' );
             }
             if ( empty( $_POST['search'] ) ) {
@@ -295,7 +295,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             //      post : [ 'page', 'cpt1', ...]
             //      taxonomy : '_none_'//<= don't load or search taxonomies
             //)
-            if ( ! is_array( $wp_object_types ) || empty( $wp_object_types ) ) {
+            if ( !is_array( $wp_object_types ) || empty( $wp_object_types ) ) {
               wp_send_json_error( 'czr_ajax_content_picker_missing_object_types' );
             }
 
@@ -358,12 +358,12 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
             $items = array();
             if ( 'post' === $args['type'] ) {
                   //What are the post types we need to fetch ?
-                  if ( '_all_' == $object_types || ! is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
+                  if ( '_all_' == $object_types || !is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
                       $post_types = get_post_types( array( 'public' => true ) );
                   } else {
                       $post_types = $object_types;
                   }
-                  if ( ! $post_types || empty( $post_types ) ) {
+                  if ( !$post_types || empty( $post_types ) ) {
                       return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
 
@@ -404,12 +404,12 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                   }
             } elseif ( 'taxonomy' === $args['type'] ) {
                   //What are the taxonomy types we need to fetch ?
-                  if ( '_all_' == $object_types || ! is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
+                  if ( '_all_' == $object_types || !is_array( $object_types ) || ( is_array( $object_types ) && empty( $object_types ) ) ) {
                       $taxonomies = get_taxonomies( array( 'show_in_nav_menus' => true ), 'names' );
                   } else {
                       $taxonomies = $object_types;
                   }
-                  if ( ! $taxonomies || ! is_array( $taxonomies ) || empty( $taxonomies ) ) {
+                  if ( !$taxonomies || !is_array( $taxonomies ) || empty( $taxonomies ) ) {
                       return new \WP_Error( 'czr_contents_invalid_post_type' );
                   }
                   $terms = get_terms( $taxonomies, array(
@@ -419,7 +419,7 @@ if ( ! class_exists( 'CZR_Fmk_Base' ) ) :
                   ) );
 
                   // Check if any taxonomies were found.
-                  if ( ! empty( $terms ) ) {
+                  if ( !empty( $terms ) ) {
                         foreach ( $terms as $term ) {
                               $items[] = array(
                                   'title'      => html_entity_decode( $term->name, ENT_QUOTES, get_bloginfo( 'charset' ) ),

@@ -370,9 +370,19 @@ input:-ms-input-placeholder {
 
 .customize-control select {
   cursor: pointer;
+  width: 99%;
 }
 
+/* Nov-dec 2019 => adapt for WP 5.3 */
+.czr-input .wp-picker-container .wp-color-result.button, .customize-control .wp-color-result.button {
+  border-color: #ccc;
+  min-height: 25px;
+}
 
+.czr-input .wp-color-result-text, .customize-control .wp-color-result-text {
+  line-height: 24px;
+  height: 24px;
+}
 
 
 
@@ -726,6 +736,7 @@ span.czr-panel-subtitle {
 
 /* GOPRO SECTION STYLE */
 /* for both hueman and customizr */
+
 #customize-controls .control-section-czr-customize-section-pro .accordion-section-title:hover,
 #customize-controls .control-section-czr-customize-section-pro .accordion-section-title:focus {
   background-color: #fff;
@@ -735,6 +746,11 @@ span.czr-panel-subtitle {
 }
 #accordion-section-go_pro_sec .accordion-section-title{
   margin: 0 0 15px;
+}
+.control-section-czr-customize-section-pro .accordion-section-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .control-section-czr-customize-section-pro .accordion-section-title .button {
   font-size: 15px;
@@ -975,7 +991,7 @@ li.customize-control[data-module] .czr-notice {
   display: block;
   float: left;
   margin: 2% 2% 0%;
-  width: 99%;
+  width: 98%;
   padding: 2%;
   background: #fff;
   /* color: #fff;*/
@@ -1023,7 +1039,7 @@ li.customize-control[data-module] .czr-notice {
 /* Display a thin outline around opened item, for multi-items modules */
 #customize-theme-controls .czr-single-item.open {
   /*border: 1px solid #dedede;*/
-  outline: 1px solid #ccc;
+  outline: 1px solid #22a0d2;
 }
 /* Keep the normal border for single module, mono items controls */
 #customize-theme-controls .mono-item-mod .czr-single-item {
@@ -1468,7 +1484,7 @@ body.czr-editing-modopt .czr-mod-opt-wrapper {
 
 
 /* OPTIONS STYLE */
-.czr-mod-opt-wrapper .czr-sub-set {
+body .czr-mod-opt-wrapper .czr-sub-set {
     /*border: 1px dotted #ccc;*/
     background: rgba(238, 238, 238, 0.13);
     padding: 3% 2%;
@@ -1617,6 +1633,7 @@ li.tab-inactive::after {
   display: none;
   margin: 0 auto;
   max-width: 1200px;
+  /*padding-top: 10px; commented for https://github.com/presscustomizr/hueman-pro-addons/issues/200 */
 }
 
 section .czr-sub-set:first-child {
@@ -2508,6 +2525,122 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 
 
 
+
+/* NIMBLECHECK */
+/* ALIGNEMENT IN MODULES */
+.czr-sub-set[data-input-type="nimblecheck"] {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  /* flex-direction: column; */
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 100%;
+}
+.czr-sub-set[data-input-type="nimblecheck"] .czr-notice, .czr-sub-set[data-input-type="nimblecheck"] .czr-html-before {
+  -ms-flex-preferred-size: 100%;
+  flex-basis: 100%;
+  -ms-flex-negative: 0;
+          flex-shrink: 0;
+  flex: 0 0 100%;
+}
+/* ALIGNEMENT IN REGULAR CONTROLS */
+.czr-control-nimblecheck {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  /* flex-direction: column; */
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 100%;
+}
+
+
+/* COMMON RULES TO MODULES AND CONTROLS */
+.nimblecheck-wrap {
+  position: relative;
+  display: inline-block;
+  float: right;
+}
+/* Hide the checkbox input (only needed for `:checked` property) */
+.nimblecheck-wrap .nimblecheck-input {
+  display: none;
+}
+/* Switch */
+.nimblecheck-wrap .nimblecheck-label {
+  display: block;
+  width: 35px;
+  height: 20px;
+  text-indent: -150%;
+  clip: rect(0 0 0 0);
+  color: transparent;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  /* Switch Rail & Knob */
+  /* Switch Rail */
+  /* Switch Knob */
+}
+.nimblecheck-wrap .nimblecheck-label:before,
+.nimblecheck-wrap .nimblecheck-label:after {
+  content: "";
+  display: block;
+  position: absolute;
+  cursor: pointer;
+}
+.nimblecheck-wrap .nimblecheck-label:before {
+  width: 100%;
+  height: 100%;
+  background-color: #999;
+  border-radius: 9999em;
+  -webkit-transition: background-color 0.35s ease;
+  -o-transition: background-color 0.35s ease;
+  transition: background-color 0.35s ease;
+}
+.nimblecheck-wrap .nimblecheck-label:after {
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #fff;
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+          box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+  -webkit-transition: left 0.15s ease;
+  -o-transition: left 0.15s ease;
+  transition: left 0.15s ease;
+}
+/* When input is checked */
+.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label {
+  /* Switch Rail */
+  /* Switch Knob */
+}
+.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label:before {
+  background-color: #33b3db;
+}
+.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label:after {
+  left: 16px
+}
+
+
+
+
+
 /* DEPRECATED since april 2nd 2019 */
 /* GUTENCHECK */
 /* This custom checkbox input is inspired from the one used in the Gutenberg plugin ( https://github.com/WordPress/gutenberg ), released under GNU General Public License
@@ -2593,94 +2726,3 @@ credits : Gutenberg team @wordpress */
     position: absolute;
     top: 6px;
 }*/
-
-
-
-/* NIMBLECHECK */
-/* Switch Container */
-.czr-sub-set[data-input-type="nimblecheck"] {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  /* flex-direction: column; */
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 100%;
-          flex: 0 0 100%;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  max-width: 100%;
-}
-.czr-sub-set[data-input-type="nimblecheck"] .czr-notice {
-  -ms-flex-preferred-size: 100%;
-  flex-basis: 100%;
-  -ms-flex-negative: 0;
-          flex-shrink: 0;
-}
-.nimblecheck-wrap {
-  position: relative;
-  display: inline-block;
-  float: right;
-}
-/* Hide the checkbox input (only needed for `:checked` property) */
-.nimblecheck-wrap .nimblecheck-input {
-  display: none;
-}
-/* Switch */
-.nimblecheck-wrap .nimblecheck-label {
-  display: block;
-  width: 35px;
-  height: 20px;
-  text-indent: -150%;
-  clip: rect(0 0 0 0);
-  color: transparent;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  /* Switch Rail & Knob */
-  /* Switch Rail */
-  /* Switch Knob */
-}
-.nimblecheck-wrap .nimblecheck-label:before,
-.nimblecheck-wrap .nimblecheck-label:after {
-  content: "";
-  display: block;
-  position: absolute;
-  cursor: pointer;
-}
-.nimblecheck-wrap .nimblecheck-label:before {
-  width: 100%;
-  height: 100%;
-  background-color: #999;
-  border-radius: 9999em;
-  -webkit-transition: background-color 0.35s ease;
-  -o-transition: background-color 0.35s ease;
-  transition: background-color 0.35s ease;
-}
-.nimblecheck-wrap .nimblecheck-label:after {
-  top: 1px;
-  left: 1px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background-color: #fff;
-  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
-          box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
-  -webkit-transition: left 0.15s ease;
-  -o-transition: left 0.15s ease;
-  transition: left 0.15s ease;
-}
-/* When input is checked */
-.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label {
-  /* Switch Rail */
-  /* Switch Knob */
-}
-.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label:before {
-  background-color: #33b3db;
-}
-.nimblecheck-wrap .nimblecheck-input:checked + .nimblecheck-label:after {
-  left: 16px
-}

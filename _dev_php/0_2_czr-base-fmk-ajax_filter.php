@@ -1,7 +1,7 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
+if ( !class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
     class CZR_Fmk_Base_Ajax_Filter extends CZR_Fmk_Base_Load_Resources {
 
         // fired in the constructor
@@ -17,31 +17,31 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
 
         // hook : 'wp_ajax_ac_get_template'
         function ac_set_ajax_czr_tmpl() {
-            if ( ! is_user_logged_in() ) {
+            if ( !is_user_logged_in() ) {
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => unauthenticated' );
             }
-            if ( ! current_user_can( 'edit_theme_options' ) ) {
+            if ( !current_user_can( 'edit_theme_options' ) ) {
               wp_send_json_error('ac_set_ajax_czr_tmpl => user_cant_edit_theme_options');
             }
-            if ( ! current_user_can( 'customize' ) ) {
+            if ( !current_user_can( 'customize' ) ) {
                 status_header( 403 );
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => customize_not_allowed' );
-            } else if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+            } else if ( !isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
                 status_header( 405 );
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => bad_method' );
             }
             $action = 'save-customize_' . get_stylesheet();
-            if ( ! check_ajax_referer( $action, 'nonce', false ) ) {
+            if ( !check_ajax_referer( $action, 'nonce', false ) ) {
                  wp_send_json_error( array(
                   'code' => 'invalid_nonce',
                   'message' => __( 'ac_set_ajax_czr_tmpl => Security check failed.' ),
                 ) );
             }
 
-            if ( ! isset( $_POST['module_type'] ) || empty( $_POST['module_type'] ) ) {
+            if ( !isset( $_POST['module_type'] ) || empty( $_POST['module_type'] ) ) {
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => missing module_type property in posted data' );
             }
-            if ( ! isset( $_POST['tmpl'] ) || empty( $_POST['tmpl'] ) ) {
+            if ( !isset( $_POST['tmpl'] ) || empty( $_POST['tmpl'] ) ) {
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => missing tmpl property in posted data' );
             }
             $tmpl = $_POST['tmpl'];
@@ -159,7 +159,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
                           </div>
                         </div>
                       <?php // case when an url is provided ?>
-                      <# } else if ( ! _.isEmpty( data.fromUrl ) ) { #>
+                      <# } else if ( !_.isEmpty( data.fromUrl ) ) { #>
                         <div class="attachment-media-view">
                           <div class="thumbnail thumbnail-thumb">
                               <img class="attachment-thumb" src="{{ data.fromUrl }}" draggable="false" alt="" />

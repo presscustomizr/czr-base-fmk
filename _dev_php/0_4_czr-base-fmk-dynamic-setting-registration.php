@@ -1,7 +1,7 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
+if ( !class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
     class CZR_Fmk_Dyn_Setting_Registration extends CZR_Fmk_Base_Tmpl_Builder {
 
         //fired in the constructor
@@ -51,11 +51,11 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
         //     )
         // )
         function czr_pre_register_dynamic_setting( $setting_params ) {
-            if ( ! is_array( $setting_params ) || empty( $setting_params ) ) {
+            if ( !is_array( $setting_params ) || empty( $setting_params ) ) {
                 error_log( 'czr_pre_register_dynamic_setting => empty $setting_params submitted' );
                 return;
             }
-            if ( ! array_key_exists( 'setting_id', $setting_params ) || empty( $setting_params['setting_id'] ) ) {
+            if ( !array_key_exists( 'setting_id', $setting_params ) || empty( $setting_params['setting_id'] ) ) {
                 error_log( 'czr_pre_register_dynamic_setting => missing setting id' );
                 return;
             }
@@ -92,7 +92,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
         function czr_setup_customizer_dynamic_setting_args( $setting_args, $setting_id ) {
             //sek_error_log( __CLASS__ . '::' . __FUNCTION__ ,  $this->registered_settings );
 
-            if ( ! is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
+            if ( !is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
               return $setting_args;
 
             // let's initialize the args to the provided param
@@ -124,8 +124,8 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                     'type'                 => empty( $setting_args[ 'type' ] ) ? 'option' : $setting_args[ 'type' ],
                     'default'              => array(),
                     'transport'            => $setting_args[ 'transport' ],
-                    'sanitize_callback'    => ( ! empty( $setting_args[ 'sanitize_callback' ] ) && function_exists( $setting_args[ 'sanitize_callback' ] ) ) ? $setting_args[ 'sanitize_callback' ] : '',
-                    'validate_callback'    => ( ! empty( $setting_args[ 'validate_callback' ] ) && function_exists( $setting_args[ 'validate_callback' ] ) ) ? $setting_args[ 'validate_callback' ] : ''
+                    'sanitize_callback'    => ( !empty( $setting_args[ 'sanitize_callback' ] ) && function_exists( $setting_args[ 'sanitize_callback' ] ) ) ? $setting_args[ 'sanitize_callback' ] : '',
+                    'validate_callback'    => ( !empty( $setting_args[ 'validate_callback' ] ) && function_exists( $setting_args[ 'validate_callback' ] ) ) ? $setting_args[ 'validate_callback' ] : ''
                 );
 
                 // if this is a module setting, it can have specific sanitize and validate callback set for the module
@@ -148,7 +148,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
 
         // hook : 'customize_dynamic_setting_class'
         function czr_setup_customizer_dynamic_setting_class( $class, $setting_id, $args ) {
-            if ( ! is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
+            if ( !is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
               return $class;
 
 
@@ -169,7 +169,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                 if ( is_array( $setting_args ) && array_key_exists( 'setting_class', $setting_args ) ) {
                     // provide new setting class if exists and not yet loaded
                     if ( is_array( $setting_args[ 'setting_class' ] ) && array_key_exists( 'name', $setting_args[ 'setting_class' ] ) && array_key_exists( 'path', $setting_args[ 'setting_class' ] ) ) {
-                        if ( ! class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) && file_exists( $setting_args[ 'setting_class' ]['path'] ) ) {
+                        if ( !class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) && file_exists( $setting_args[ 'setting_class' ]['path'] ) ) {
                             require_once(  $setting_args[ 'setting_class' ]['path'] );
                         }
                         if ( class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) ) {
@@ -192,9 +192,9 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
             // error_log( '<REGISTERED SETTINGS>' );
             // error_log( print_r( $this->registered_settings, true ) );
             // error_log( '</REGISTERED SETTINGS>' );
-            if ( ! is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
+            if ( !is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
               return $js_params;
-            $js_params = ! is_array( $js_params ) ? array() : $js_params;
+            $js_params = !is_array( $js_params ) ? array() : $js_params;
 
             //  'localized_control_js' => array(
             //     'deps' => 'czr-customizer-fmk',
@@ -215,7 +215,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
             foreach ( $this->registered_settings as $registerered_setting_id => $params ) {
                 $params = wp_parse_args( $params, $this -> default_dynamic_setting_params );
                 // We need the 'option_value' entry, even if empty
-                if ( ! array_key_exists( 'option_value', $params ) || ! is_array( $params['option_value'] ) )
+                if ( !array_key_exists( 'option_value', $params ) || !is_array( $params['option_value'] ) )
                   continue;
                 // Check if not already setup
                 if ( array_key_exists( $registerered_setting_id, $params ) ) {
@@ -280,7 +280,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
             // error_log(print_r( $this->registered_settings, true ));
             // error_log('</MODULE REGISTRATION>');
 
-            if ( ! is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
+            if ( !is_array( $this->registered_settings ) || empty( $this->registered_settings ) )
               return;
 
             // loop on each registered modules
@@ -296,7 +296,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                 if ( is_array( $setting_args ) && array_key_exists( 'setting_class', $setting_args ) ) {
                     // provide new setting class if exists and not yet loaded
                     if ( is_array( $setting_args[ 'setting_class' ] ) && array_key_exists( 'name', $setting_args[ 'setting_class' ] ) && array_key_exists( 'path', $setting_args[ 'setting_class' ] ) ) {
-                        if ( ! class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) && file_exists( $setting_args[ 'setting_class' ]['path'] ) ) {
+                        if ( !class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) && file_exists( $setting_args[ 'setting_class' ]['path'] ) ) {
                             require_once(  $setting_args[ 'setting_class' ]['path'] );
                         }
                         if ( class_exists( $setting_args[ 'setting_class' ][ 'name' ] ) ) {
@@ -318,7 +318,7 @@ if ( ! class_exists( 'CZR_Fmk_Dyn_Setting_Registration' ) ) :
                 if ( is_array( $control_args ) && array_key_exists( 'control_class', $control_args ) ) {
                     // provide new setting class if exists and not yet loaded
                     if ( is_array( $control_args[ 'control_class' ] ) && array_key_exists( 'name', $control_args[ 'control_class' ] ) && array_key_exists( 'path', $control_args[ 'control_class' ] ) ) {
-                        if ( ! class_exists( $control_args[ 'control_class' ][ 'name' ] ) && file_exists( $control_args[ 'control_class' ]['path'] ) ) {
+                        if ( !class_exists( $control_args[ 'control_class' ][ 'name' ] ) && file_exists( $control_args[ 'control_class' ]['path'] ) ) {
                             require_once(  $control_args[ 'control_class' ]['path'] );
                         }
                         if ( class_exists( $control_args[ 'control_class' ][ 'name' ] ) ) {

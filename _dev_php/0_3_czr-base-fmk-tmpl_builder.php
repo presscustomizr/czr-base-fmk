@@ -1,7 +1,7 @@
 <?php
 ////////////////////////////////////////////////////////////////
 // CZR_Fmk_Base
-if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
+if ( !class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
     class CZR_Fmk_Base_Tmpl_Builder extends CZR_Fmk_Base_Ajax_Filter {
         /*********************************************************
         ** TMPL BUILDER
@@ -65,17 +65,17 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 'section_collection' => array()
             );
             foreach( $tmpl_map as $input_id => $input_data ) {
-                if ( ! is_string( $input_id ) || empty( $input_id ) ) {
+                if ( !is_string( $input_id ) || empty( $input_id ) ) {
                     wp_send_json_error( __FUNCTION__ . ' => wrong input id' );
                     break;
                 }
-                if ( ! is_array( $input_data ) ) {
+                if ( !is_array( $input_data ) ) {
                     wp_send_json_error( __FUNCTION__ . ' => wrong var type for the input_data of input id : ' . $input_id );
                     break;
                 }
                 // check that we have no unknown entries in the provided input_data
                 $maybe_diff = array_diff_key( $input_data, $default_input_entries );
-                if ( ! empty( $maybe_diff ) ) {
+                if ( !empty( $maybe_diff ) ) {
                     error_log('<' . __FUNCTION__ . '>');
                     error_log( '=> at least one unknown param in the registered input params for input id : ' . $input_id );
                     error_log( print_r( $maybe_diff, true ) );
@@ -88,7 +88,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 $input_data = wp_parse_args( $input_data, $default_input_entries );
 
                 // Do we have a specific template provided ?
-                if ( ! empty( $input_data[ 'tmpl_callback' ] ) && function_exists( $input_data[ 'tmpl_callback' ] ) ) {
+                if ( !empty( $input_data[ 'tmpl_callback' ] ) && function_exists( $input_data[ 'tmpl_callback' ] ) ) {
                     $html .= call_user_func_array( $input_data[ 'tmpl_callback' ], array( $input_data ) );
                 } else {
                     $html .= $this -> ac_get_default_input_tmpl( $input_id, $input_data );
@@ -102,7 +102,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
 
         // Fired in ac_generate_czr_tmpl_from_map
         function ac_get_default_input_tmpl( $input_id, $input_data ) {
-            if ( ! array_key_exists( 'input_type', $input_data ) || empty( $input_data[ 'input_type' ] ) ) {
+            if ( !array_key_exists( 'input_type', $input_data ) || empty( $input_data[ 'input_type' ] ) ) {
                  wp_send_json_error( 'ac_get_input_tmpl => missing input type for input id : ' . $input_id );
             }
             $input_type = $input_data[ 'input_type' ];
@@ -122,31 +122,31 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                 $is_width_100 ? 'width-100' : '',
                 'hidden' === $input_type ? 'hidden' : '',
                 $input_type,
-                ! empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : ''
+                !empty( $input_data['transport'] ) ? 'data-transport="'. $input_data['transport'] .'"' : ''
             );
             ?>
-            <?php if ( ! empty( $input_data['html_before'] ) ) : ?>
+            <?php if ( !empty( $input_data['html_before'] ) ) : ?>
                 <div class="czr-html-before"><?php echo $input_data['html_before']; ?></div>
             <?php endif; ?>
 
-            <?php if ( ! empty( $input_data['notice_before_title'] ) ) : ?>
+            <?php if ( !empty( $input_data['notice_before_title'] ) ) : ?>
                 <span class="czr-notice"><?php echo $input_data['notice_before_title']; ?></span><br/>
             <?php endif; ?>
 
             <?php
             // no need to print a title for an hidden input
             if ( $input_type !== 'hidden' ) {
-                printf( '<div class="customize-control-title %1$s">%2$s</div>', ! empty( $input_data['title_width'] ) ? $input_data['title_width'] : '', $input_data['title'] );
+                printf( '<div class="customize-control-title %1$s">%2$s</div>', !empty( $input_data['title_width'] ) ? $input_data['title_width'] : '', $input_data['title'] );
             }
             ?>
-            <?php if ( ! empty( $input_data['notice_before'] ) ) : ?>
+            <?php if ( !empty( $input_data['notice_before'] ) ) : ?>
                 <span class="czr-notice"><?php echo $input_data['notice_before']; ?></span>
             <?php endif; ?>
 
-            <?php printf( '<div class="czr-input %1$s">', ! empty( $input_data['input_width'] ) ? $input_data['input_width'] : '' ); ?>
+            <?php printf( '<div class="czr-input %1$s">', !empty( $input_data['input_width'] ) ? $input_data['input_width'] : '' ); ?>
 
             <?php
-            if ( ! empty( $input_data['input_template'] ) && is_string( $input_data['input_template'] ) ) {
+            if ( !empty( $input_data['input_template'] ) && is_string( $input_data['input_template'] ) ) {
                 echo $input_data['input_template'];
             } else {
                 // THIS IS WHERE THE ACTUAL INPUT CONTENT IS SET
@@ -154,11 +154,11 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
             }
             ?>
               </div><?php // class="czr-input" ?>
-              <?php if ( ! empty( $input_data['notice_after'] ) ) : ?>
+              <?php if ( !empty( $input_data['notice_after'] ) ) : ?>
                   <span class="czr-notice"><?php echo $input_data['notice_after']; ?></span>
               <?php endif; ?>
 
-              <?php if ( ! empty( $input_data['html_after'] ) ) : ?>
+              <?php if ( !empty( $input_data['html_after'] ) ) : ?>
                 <div class="czr-html-after"><?php echo $input_data['html_after']; ?></div>
               <?php endif; ?>
 
@@ -191,7 +191,7 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
               do_action( 'czr_set_input_tmpl_content', $input_type, $input_id, $input_data );
             $input_tmpl_content = ob_get_clean();
 
-            if ( ! empty( $input_tmpl_content ) ) {
+            if ( !empty( $input_tmpl_content ) ) {
                 echo $input_tmpl_content;
             } else {
                 // Then, if we have no content yet, let's go thought the default input cases
@@ -239,9 +239,9 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                       ?>
                         <?php
                         printf( '<input data-czrtype="%4$s" type="number" %1$s %2$s %3$s value="{{ data[\'%4$s\'] }}" />',
-                          ! empty( $input_data['step'] ) ? 'step="'. $input_data['step'] .'"' : '',
-                          ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
-                          ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
+                          !empty( $input_data['step'] ) ? 'step="'. $input_data['step'] .'"' : '',
+                          !empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
+                          !empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
                           $input_id
                         );
                         ?>
@@ -336,10 +336,10 @@ if ( ! class_exists( 'CZR_Fmk_Base_Tmpl_Builder' ) ) :
                         <?php //<# //console.log( 'IN php::ac_get_default_input_tmpl() => data range_slide => ', data ); #> ?>
                         <?php
                         printf( '<input data-czrtype="%5$s" type="range" %1$s %2$s %3$s %4$s value="{{ data[\'%5$s\'] }}" />',
-                          ! empty( $input_data['orientation'] ) ? 'data-orientation="'. $input_data['orientation'] .'"' : '',
-                          ! empty( $input_data['unit'] ) ? 'data-unit="'. $input_data['unit'] .'"' : '',
-                          ! empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
-                          ! empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
+                          !empty( $input_data['orientation'] ) ? 'data-orientation="'. $input_data['orientation'] .'"' : '',
+                          !empty( $input_data['unit'] ) ? 'data-unit="'. $input_data['unit'] .'"' : '',
+                          !empty( $input_data['min'] ) ? 'min="'. $input_data['min'] .'"' : '',
+                          !empty( $input_data['max'] ) ? 'max="'. $input_data['max'] .'"' : '',
                           $input_id
                         );
                         ?>
