@@ -41,7 +41,7 @@ if ( !class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
                     'defaultString'    => __( 'Default' ),
                     'defaultAriaLabel' => __( 'Select default color' ),
                     'pick'             => __( 'Select Color' ),
-                    'defaultLabel'     => __( 'Color value' ),
+                    'defaultLabel'     => __( 'Color value' )
                   )
                 );
             }
