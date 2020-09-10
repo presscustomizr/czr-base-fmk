@@ -34,7 +34,7 @@ if ( !class_exists( 'CZR_Fmk_Base_Load_Resources' ) ) :
             if ( version_compare( $wp_version, '5.4.2' , '>=' ) ) {
                 wp_localize_script(
                   'wp-color-picker',
-                  'wpColorPickerL10n',
+                  'nb_wpColorPickerL10n',
                   array(
                     'clear'            => __( 'Clear' ),
                     'clearAriaLabel'   => __( 'Clear color' ),
