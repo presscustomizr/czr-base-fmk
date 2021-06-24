@@ -20,9 +20,6 @@ if ( !class_exists( 'CZR_Fmk_Base_Ajax_Filter' ) ) :
             if ( !is_user_logged_in() ) {
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => unauthenticated' );
             }
-            if ( !current_user_can( 'edit_theme_options' ) ) {
-              wp_send_json_error('ac_set_ajax_czr_tmpl => user_cant_edit_theme_options');
-            }
             if ( !current_user_can( 'customize' ) ) {
                 status_header( 403 );
                 wp_send_json_error( 'ac_set_ajax_czr_tmpl => customize_not_allowed' );
